@@ -65,6 +65,12 @@ namespace Hangfire.Community.Dashboard.Heatmap
             var startOfDayUtc = clientLocalMidnight.AddMinutes(clientOffsetMinutes);
             var endOfDayUtc = startOfDayUtc.AddDays(1);
 
+            //calculate start of week for weekly heatmap
+            var daysFromSunday = (int)clientLocalNow.DayOfWeek;
+            var clientLocalWeekStart = clientLocalMidnight.AddDays(-daysFromSunday);
+            var startOfWeekUtc = clientLocalWeekStart.AddMinutes(clientOffsetMinutes);
+            var endOfWeekUtc = startOfWeekUtc.AddDays(7);
+
             foreach (var job in recurringJobs)
             {
                 if (!job.NextExecution.HasValue) continue;
@@ -79,14 +85,23 @@ namespace Hangfire.Community.Dashboard.Heatmap
                     NextExecution = job.NextExecution,
                     LastExecution = job.LastExecution,
                     TimeZoneId = job.TimeZoneId ?? "UTC",
-                    Executions = new List<DateTime>()
+                    Executions = new List<DateTime>(),
+                    WeeklyExecutions = new List<DateTime>()
                 };
 
-                //calculate all executions times
+                //calculate all executions times for today
                 var nextOccurrence = cronExpression.GetNextOccurrence(startOfDayUtc, TimeZoneInfo.Utc);
                 while (nextOccurrence.HasValue && nextOccurrence.Value < endOfDayUtc)
                 {
                     scheduleInfo.Executions.Add(nextOccurrence.Value);
+                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, TimeZoneInfo.Utc);
+                }
+
+                //calculate all executions times for the week
+                nextOccurrence = cronExpression.GetNextOccurrence(startOfWeekUtc, TimeZoneInfo.Utc);
+                while (nextOccurrence.HasValue && nextOccurrence.Value < endOfWeekUtc)
+                {
+                    scheduleInfo.WeeklyExecutions.Add(nextOccurrence.Value);
                     nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, TimeZoneInfo.Utc);
                 }
 

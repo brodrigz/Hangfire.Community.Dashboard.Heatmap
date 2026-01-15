@@ -12,5 +12,6 @@ namespace Hangfire.Community.Dashboard.Heatmap.Models
         public DateTime? NextExecution { get; set; }
         public DateTime? LastExecution { get; set; }
         public List<DateTime> Executions { get; set; }
+        public List<DateTime> WeeklyExecutions { get; set; }
     }
 }
