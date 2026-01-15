@@ -9,7 +9,8 @@ Hangfire.Community.Dashboard.Heatmap adds a visual timeline and heatmap view to 
 
 Visualize your recurring job schedules at a glance with an timeline showing past and upcoming executions, or switch to the heatmap view to visualize execution density by hour.
 
--add screenshot here
+<img width="1865" height="876" alt="image" src="https://github.com/user-attachments/assets/5368b8a6-e8a8-4dcd-a813-f882a34585d7" />
+<img width="1853" height="872" alt="image" src="https://github.com/user-attachments/assets/d69b0f15-4e9e-4042-b49b-9c254a883251" />
 
 ---
 
@@ -67,7 +68,6 @@ namespace Application
 
 - Hangfire 1.7.0 or later
 - .NET Standard 2.0 / .NET Framework 4.6.1 / .NET Core 2.0 or later
-- 
 ---
 
 ## Contributing
