@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0</TargetFrameworks>
-		<IsPackable>true</IsPackable>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>true</IsPackable>
 		<PackageOutputPath>artifacts</PackageOutputPath>
 		<PackageId>Hangfire.Community.Dashboard.Heatmap</PackageId>
 		<IncludeContentInPack>true</IncludeContentInPack>
@@ -30,18 +30,29 @@
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 
-	<!-- Full MSBuild is required to generate Razor classes -->
+	<!-- Full MSBuild (from Visual Studio) is required to generate Razor classes -->
+	<!-- RazorGenerator.MsBuild requires .NET Framework MSBuild, not .NET SDK MSBuild -->
 	<PropertyGroup>
-		<MSBuild14FullPath>$(MSBuildProgramFiles32)\..\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe</MSBuild14FullPath>
-		<MSBuildCurrentFullPath>$(MSBuildBinPath)\MSBuild.exe</MSBuildCurrentFullPath>
 		<RazorProjectFile>Razor.build</RazorProjectFile>
-		<InnerTargets>GenerateRazorClasses;Build</InnerTargets>
+		<!-- Try Visual Studio 2022 locations first -->
+		<VSMSBuildPath Condition="Exists('$(ProgramFiles)\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe')">$(ProgramFiles)\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe</VSMSBuildPath>
+		<VSMSBuildPath Condition="'$(VSMSBuildPath)' == '' and Exists('$(ProgramFiles)\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe')">$(ProgramFiles)\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe</VSMSBuildPath>
+		<VSMSBuildPath Condition="'$(VSMSBuildPath)' == '' and Exists('$(ProgramFiles)\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe')">$(ProgramFiles)\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe</VSMSBuildPath>
+		<VSMSBuildPath Condition="'$(VSMSBuildPath)' == '' and Exists('$(ProgramFiles)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe')">$(ProgramFiles)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe</VSMSBuildPath>
+		<!-- Fallback to Visual Studio Preview/Insiders -->
+		<VSMSBuildPath Condition="'$(VSMSBuildPath)' == '' and Exists('$(ProgramFiles)\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\MSBuild.exe')">$(ProgramFiles)\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\MSBuild.exe</VSMSBuildPath>
+		<!-- Fallback to .NET Framework MSBuild -->
+		<VSMSBuildPath Condition="'$(VSMSBuildPath)' == '' and Exists('$(MSBuildProgramFiles32)\..\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe')">$(MSBuildProgramFiles32)\..\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe</VSMSBuildPath>
 	</PropertyGroup>
 
-	<Target Name="GenerateRazorClasses" Condition="Exists('$(PkgRazorGenerator_MsBuild)\build\RazorGenerator.MsBuild.targets')">
-		<Exec Command="&quot;$(MSBuildCurrentFullPath)&quot; $(RazorProjectFile) /v:quiet /nologo /p:PkgRazorGenerator_MsBuild=&quot;$(PkgRazorGenerator_MsBuild)&quot;" Condition="Exists('$(MSBuildCurrentFullPath)')" />
-		<Exec Command="&quot;$(MSBuild14FullPath)&quot; $(RazorProjectFile) /v:quiet /nologo /p:PkgRazorGenerator_MsBuild=&quot;$(PkgRazorGenerator_MsBuild)&quot;" Condition="Exists('$(MSBuild14FullPath)') and !Exists('$(MSBuildCurrentFullPath)')" />
-		<Warning Text="Classes for Razor files (*.cshtml) weren't re-generated: couldn't find the '$(MSBuild14FullPath)' or '$(MSBuildCurrentFullPath)' file" Condition="!Exists('$(MSBuild14FullPath)') and !Exists('$(MSBuildCurrentFullPath)')" />
+	<!-- Ensure Razor classes are regenerated before compilation using .NET Framework MSBuild -->
+	<Target Name="GenerateRazorClasses" BeforeTargets="BeforeCompile;CoreCompile" Condition="Exists('$(PkgRazorGenerator_MsBuild)\build\RazorGenerator.MsBuild.targets') and '$(VSMSBuildPath)' != ''">
+		<Message Text="Regenerating Razor classes from cshtml files using: $(VSMSBuildPath)" Importance="high" />
+		<Exec Command="&quot;$(VSMSBuildPath)&quot; &quot;$(MSBuildProjectDirectory)\$(RazorProjectFile)&quot; /v:minimal /nologo /p:PkgRazorGenerator_MsBuild=&quot;$(PkgRazorGenerator_MsBuild)&quot;" />
+	</Target>
+	
+	<Target Name="WarnNoMSBuild" BeforeTargets="BeforeCompile;CoreCompile" Condition="'$(VSMSBuildPath)' == ''">
+		<Warning Text="Classes for Razor files (*.cshtml) won't be regenerated: Visual Studio MSBuild was not found. Please ensure Visual Studio 2022 is installed or manually regenerate the .cshtml.cs files." />
 	</Target>
 
 	<ItemGroup>

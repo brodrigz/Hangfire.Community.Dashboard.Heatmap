@@ -1,8 +1,24 @@
 <Project ToolsVersion="14.0" DefaultTargets="PrecompileRazorFiles" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(PkgRazorGenerator_MsBuild)\build\RazorGenerator.MsBuild.targets" Condition="Exists('$(PkgRazorGenerator_MsBuild)\build\RazorGenerator.MsBuild.targets')" />
   <PropertyGroup>
-    <RootNamespace>Hangfire.Community.Dashboard.CronSchedule</RootNamespace>
+    <RootNamespace>Hangfire.Community.Dashboard.Heatmap</RootNamespace>
     <GeneratePrettyNames>true</GeneratePrettyNames>
-    <RazorViewsCodeGenDirectory>$(MsBuildProjectDirectory)\</RazorViewsCodeGenDirectory>
+    <!-- Use RazorViewsCodeGenDirectory relative to Razor.build location -->
+    <RazorViewsCodeGenDirectory>$(MSBuildThisFileDirectory)</RazorViewsCodeGenDirectory>
+    <!-- Force regeneration of Razor files -->
+    <RazorCodeGenForceRegenerate>true</RazorCodeGenForceRegenerate>
   </PropertyGroup>
+  
+  <!-- This tells RazorGenerator which files to compile -->
+  <ItemGroup>
+    <RazorFiles Include="$(MSBuildThisFileDirectory)Pages\*.cshtml" />
+  </ItemGroup>
+  
+  <!-- Force regeneration by defining outputs that don't exist -->
+  <Target Name="ForceRegenerate" BeforeTargets="PrecompileRazorFiles">
+    <Message Text="Forcing Razor regeneration..." Importance="high" />
+    <ItemGroup>
+      <RazorFilesForce Include="@(RazorFiles)" />
+    </ItemGroup>
+  </Target>
 </Project>
