@@ -7,12 +7,27 @@
 @{
     Layout = new LayoutPage(Title);
     var apiUrl = $"{Url.To(GlobalConfigurationExtension.RouteBase)}/api/recurring-jobs";
+    var version = typeof(GlobalConfigurationExtension).Assembly.GetName().Version;
+    var versionString = $"v{version.Major}.{version.Minor}.{version.Build}";
 }
 
 <style>
     /* ===== Base Styles ===== */
     .cron-schedule-container {
         padding: 20px;
+        position: relative;
+    }
+
+    .cron-version-badge {
+        font-size: 11px;
+        color: #6c757d;
+        background: #f8f9fa;
+        padding: 2px 8px;
+        border-radius: 3px;
+        border: 1px solid #dee2e6;
+        vertical-align: middle;
+        margin-left: 10px;
+        font-weight: normal;
     }
 
     .cron-schedule-header {
@@ -22,10 +37,10 @@
         margin-bottom: 20px;
     }
 
-    .cron-schedule-header h2 {
-        margin: 0;
-        color: #333;
-    }
+        .cron-schedule-header h2 {
+            margin: 0;
+            color: #333;
+        }
 
     .cron-schedule-controls {
         display: flex;
@@ -63,9 +78,9 @@
         border-right: 1px solid #495057;
     }
 
-    .cron-hour-label:last-child {
-        border-right: none;
-    }
+        .cron-hour-label:last-child {
+            border-right: none;
+        }
 
     .cron-job-row {
         display: flex;
@@ -103,9 +118,9 @@
         border-right: 1px solid #dee2e6;
     }
 
-    .cron-hour-cell:last-child {
-        border-right: none;
-    }
+        .cron-hour-cell:last-child {
+            border-right: none;
+        }
 
     .cron-execution-marker {
         position: absolute;
@@ -121,18 +136,18 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
 
-    .cron-execution-marker:hover {
-        transform: translate(-50%, -50%) scale(1.3);
-        background: #0056b3;
-    }
+        .cron-execution-marker:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            background: #0056b3;
+        }
 
-    .cron-execution-marker.past {
-        background: #6c757d;
-    }
+        .cron-execution-marker.past {
+            background: #6c757d;
+        }
 
-    .cron-execution-marker.upcoming {
-        background: #28a745;
-    }
+        .cron-execution-marker.upcoming {
+            background: #28a745;
+        }
 
     /* Tooltip */
     .cron-tooltip {
@@ -149,20 +164,20 @@
         display: none;
     }
 
-    .cron-tooltip.visible {
-        display: block;
-    }
+        .cron-tooltip.visible {
+            display: block;
+        }
 
-    .cron-tooltip::after {
-        content: '';
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: #343a40 transparent transparent transparent;
-    }
+        .cron-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #343a40 transparent transparent transparent;
+        }
 
     /* Current time indicator */
     .cron-current-time {
@@ -174,16 +189,16 @@
         z-index: 5;
     }
 
-    .cron-current-time::before {
-        content: 'NOW';
-        position: absolute;
-        top: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 10px;
-        color: #dc3545;
-        font-weight: bold;
-    }
+        .cron-current-time::before {
+            content: 'NOW';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #dc3545;
+            font-weight: bold;
+        }
 
     /* Legend */
     .cron-legend {
@@ -210,13 +225,13 @@
         border-radius: 50%;
     }
 
-    .cron-legend-marker.past {
-        background: #6c757d;
-    }
+        .cron-legend-marker.past {
+            background: #6c757d;
+        }
 
-    .cron-legend-marker.upcoming {
-        background: #28a745;
-    }
+        .cron-legend-marker.upcoming {
+            background: #28a745;
+        }
 
     /* States */
     .cron-state {
@@ -225,9 +240,9 @@
         display: none;
     }
 
-    .cron-state.visible {
-        display: block;
-    }
+        .cron-state.visible {
+            display: block;
+        }
 
     .cron-loading {
         color: #333;
@@ -263,15 +278,63 @@
         background: #e9ecef;
     }
 
-    .cron-heatmap-cell:hover {
-        transform: scale(1.1);
-    }
+        .cron-heatmap-cell:hover {
+            transform: scale(1.1);
+        }
+
+        .cron-heatmap-cell.current-hour {
+            outline: 3px solid #007bff;
+            outline-offset: 2px;
+        }
 
     .cron-heatmap-labels {
         display: flex;
         justify-content: space-between;
         font-size: 11px;
         color: #6c757d;
+    }
+
+    /* Daily Heatmap */
+    .cron-daily-heatmap {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin-bottom: 10px;
+        max-width: 500px;
+    }
+
+    .cron-daily-heatmap-cell {
+        aspect-ratio: 1;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s;
+        background: #e9ecef;
+        min-height: 50px;
+    }
+
+        .cron-daily-heatmap-cell:hover {
+            transform: scale(1.05);
+        }
+
+        .cron-daily-heatmap-cell.today {
+            outline: 3px solid #007bff;
+            outline-offset: 2px;
+        }
+
+    .cron-daily-heatmap-labels {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        max-width: 500px;
+        font-size: 11px;
+        color: #6c757d;
+        text-align: center;
     }
 
     /* Queue badge */
@@ -290,18 +353,18 @@
         margin-bottom: 15px;
     }
 
-    .cron-view-toggle .btn {
-        margin-right: 5px;
-    }
+        .cron-view-toggle .btn {
+            margin-right: 5px;
+        }
 
     /* View panels */
     .cron-view-panel {
         display: none;
     }
 
-    .cron-view-panel.active {
-        display: block;
-    }
+        .cron-view-panel.active {
+            display: block;
+        }
 
     /* Jobs table */
     .cron-jobs-table {
@@ -309,26 +372,52 @@
         border-radius: 4px;
     }
 
-    .cron-jobs-table th {
-        background: #f8f9fa;
-        color: #333;
-    }
+        .cron-jobs-table th {
+            background: #f8f9fa;
+            color: #333;
+        }
 
-    .cron-jobs-table td {
-        color: #333;
-    }
+        .cron-jobs-table td {
+            color: #333;
+        }
 
-    .cron-jobs-table code {
-        background: #e9ecef;
-        color: #333;
-        padding: 2px 6px;
-        border-radius: 3px;
-    }
+        .cron-jobs-table code {
+            background: #e9ecef;
+            color: #333;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
 
     .cron-timezone-info {
         font-size: 12px;
         color: #6c757d;
         margin-bottom: 10px;
+    }
+
+    /* Popover custom styles */
+    .cron-schedule-container .popover {
+        max-width: 350px;
+    }
+
+    .cron-schedule-container .popover-content {
+        font-size: 12px;
+        white-space: pre-line;
+    }
+
+    .cron-popover-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .cron-popover-jobs {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #eee;
+    }
+
+    .cron-popover-job-item {
+        padding: 2px 0;
+        font-size: 11px;
     }
 
     /* ===== Dark Mode ===== */
@@ -378,17 +467,17 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.4);
         }
 
-        .cron-execution-marker:hover {
-            background: #74c0fc;
-        }
+            .cron-execution-marker:hover {
+                background: #74c0fc;
+            }
 
-        .cron-execution-marker.past {
-            background: #868e96;
-        }
+            .cron-execution-marker.past {
+                background: #868e96;
+            }
 
-        .cron-execution-marker.upcoming {
-            background: #51cf66;
-        }
+            .cron-execution-marker.upcoming {
+                background: #51cf66;
+            }
 
         .cron-tooltip {
             background: #16213e;
@@ -396,17 +485,17 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
 
-        .cron-tooltip::after {
-            border-color: #16213e transparent transparent transparent;
-        }
+            .cron-tooltip::after {
+                border-color: #16213e transparent transparent transparent;
+            }
 
         .cron-current-time {
             background: #ff6b6b;
         }
 
-        .cron-current-time::before {
-            color: #ff6b6b;
-        }
+            .cron-current-time::before {
+                color: #ff6b6b;
+            }
 
         .cron-legend {
             background: #1a1a2e;
@@ -441,7 +530,23 @@
             background: #2d2d44;
         }
 
+        .cron-heatmap-cell.current-hour {
+            outline-color: #4dabf7;
+        }
+
         .cron-heatmap-labels {
+            color: #868e96;
+        }
+
+        .cron-daily-heatmap-cell {
+            background: #2d2d44;
+        }
+
+            .cron-daily-heatmap-cell.today {
+                outline-color: #4dabf7;
+            }
+
+        .cron-daily-heatmap-labels {
             color: #868e96;
         }
 
@@ -454,34 +559,34 @@
             background: #1a1a2e;
         }
 
-        .cron-jobs-table th {
-            background: #16213e;
-            color: #e9ecef;
-            border-color: #2d2d44;
-        }
+            .cron-jobs-table th {
+                background: #16213e;
+                color: #e9ecef;
+                border-color: #2d2d44;
+            }
 
-        .cron-jobs-table td {
-            color: #e9ecef;
-            border-color: #2d2d44;
-        }
+            .cron-jobs-table td {
+                color: #e9ecef;
+                border-color: #2d2d44;
+            }
 
-        .cron-jobs-table code {
-            background: #2d2d44;
-            color: #4dabf7;
-        }
+            .cron-jobs-table code {
+                background: #2d2d44;
+                color: #4dabf7;
+            }
 
-        .cron-jobs-table tr:nth-child(even) {
-            background: #16213e;
-        }
+            .cron-jobs-table tr:nth-child(even) {
+                background: #16213e;
+            }
 
-        .cron-jobs-table tr:nth-child(odd) {
-            background: #1a1a2e;
-        }
+            .cron-jobs-table tr:nth-child(odd) {
+                background: #1a1a2e;
+            }
 
-        .cron-jobs-table .label-default {
-            background: #495057;
-            color: #e9ecef;
-        }
+            .cron-jobs-table .label-default {
+                background: #495057;
+                color: #e9ecef;
+            }
 
         .cron-schedule-container h4 {
             color: #e9ecef;
@@ -490,13 +595,71 @@
         .cron-timezone-info {
             color: #868e96;
         }
+
+        .cron-version-badge {
+            background: #2d2d44;
+            border-color: #495057;
+            color: #868e96;
+        }
+
+        /* Popover dark mode - global styles since popovers are appended to body */
+        .popover {
+            background-color: #1a1a2e;
+            border-color: #2d2d44;
+        }
+
+        .popover-title {
+            background-color: #16213e;
+            border-bottom-color: #2d2d44;
+            color: #e9ecef;
+        }
+
+        .popover-content {
+            color: #e9ecef;
+        }
+
+        .popover.top > .arrow {
+            border-top-color: #2d2d44;
+        }
+
+        .popover.top > .arrow::after {
+            border-top-color: #1a1a2e;
+        }
+
+        .popover.bottom > .arrow {
+            border-bottom-color: #2d2d44;
+        }
+
+        .popover.bottom > .arrow::after {
+            border-bottom-color: #1a1a2e;
+        }
+
+        .popover.left > .arrow {
+            border-left-color: #2d2d44;
+        }
+
+        .popover.left > .arrow::after {
+            border-left-color: #1a1a2e;
+        }
+
+        .popover.right > .arrow {
+            border-right-color: #2d2d44;
+        }
+
+        .popover.right > .arrow::after {
+            border-right-color: #1a1a2e;
+        }
+
+        .cron-popover-jobs {
+            border-top-color: #2d2d44;
+        }
     }
 </style>
 
 <div class="cron-schedule-container">
     <!-- Header -->
     <div class="cron-schedule-header">
-        <h2>@Title</h2>
+        <h2>@Title <span class="cron-version-badge">@versionString</span></h2>
         <div class="cron-schedule-controls">
             <button class="btn btn-sm btn-default" id="cron-refresh-btn">
                 <span class="glyphicon glyphicon-refresh"></span> Refresh
@@ -507,23 +670,12 @@
     <!-- Timezone Info -->
     <div class="cron-timezone-info" id="cron-timezone-info"></div>
 
-    <!-- Legend -->
-    <div class="cron-legend">
-        <div class="cron-legend-item">
-            <div class="cron-legend-marker past"></div>
-            <span>Past Execution</span>
-        </div>
-        <div class="cron-legend-item">
-            <div class="cron-legend-marker upcoming"></div>
-            <span>Upcoming Execution</span>
-        </div>
-    </div>
-
     <!-- View Toggle -->
     <div class="cron-view-toggle">
         <button class="btn btn-sm btn-primary" id="cron-btn-timeline">Timeline View</button>
         <button class="btn btn-sm btn-default" id="cron-btn-heatmap">Heatmap View</button>
     </div>
+
 
     <!-- States -->
     <div class="cron-state cron-loading visible" id="cron-loading">
@@ -534,6 +686,19 @@
 
     <!-- Timeline View -->
     <div class="cron-view-panel" id="cron-view-timeline">
+
+        <!-- Legend -->
+        <div class="cron-legend">
+            <div class="cron-legend-item">
+                <div class="cron-legend-marker past"></div>
+                <span>Past Execution</span>
+            </div>
+            <div class="cron-legend-item">
+                <div class="cron-legend-marker upcoming"></div>
+                <span>Upcoming Execution</span>
+            </div>
+        </div>
+
         <div class="cron-timeline" id="cron-timeline">
             <div class="cron-timeline-header">
                 <div class="cron-timeline-job-header">Job</div>
@@ -549,11 +714,28 @@
 
     <!-- Heatmap View -->
     <div class="cron-view-panel" id="cron-view-heatmap">
-        <h4>Execution Density by Hour (Local Time)</h4>
+        <h4>Execution Density by Day (This Week)</h4>
+        <div class="cron-daily-heatmap" id="cron-daily-heatmap">
+            @for (int d = 0; d < 7; d++)
+            {
+                <div class="cron-daily-heatmap-cell" data-day="@d"></div>
+            }
+        </div>
+        <div class="cron-daily-heatmap-labels">
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+        </div>
+
+        <h4 style="margin-top: 30px;">Execution Density by Hour (Today)</h4>
         <div class="cron-heatmap" id="cron-heatmap">
             @for (int h = 0; h < 24; h++)
             {
-                <div class="cron-heatmap-cell" data-hour="@h" title="@h.ToString("00"):00 - 0 execution(s)"></div>
+                <div class="cron-heatmap-cell" data-hour="@h"></div>
             }
         </div>
         <div class="cron-heatmap-labels">
@@ -583,274 +765,405 @@
 </div>
 
 <script>
-(function() {
-    var apiUrl = '@apiUrl';
-    var jobsData = [];
-    var currentView = 'timeline';
+    (function() {
+        var apiUrl = '@apiUrl';
+        var jobsData = [];
+        var currentView = 'timeline';
 
-    // DOM references
-    var loading = document.getElementById('cron-loading');
-    var error = document.getElementById('cron-error');
-    var noJobs = document.getElementById('cron-no-jobs');
-    var timelineView = document.getElementById('cron-view-timeline');
-    var heatmapView = document.getElementById('cron-view-heatmap');
-    var timelineBody = document.getElementById('cron-timeline-body');
-    var heatmapCells = document.querySelectorAll('.cron-heatmap-cell');
-    var tableBody = document.getElementById('cron-jobs-table-body');
-    var currentTimeEl = document.getElementById('cron-current-time');
-    var tooltip = document.getElementById('cron-tooltip');
-    var btnTimeline = document.getElementById('cron-btn-timeline');
-    var btnHeatmap = document.getElementById('cron-btn-heatmap');
-    var refreshBtn = document.getElementById('cron-refresh-btn');
-    var timezoneInfo = document.getElementById('cron-timezone-info');
+        // DOM references
+        var loading = document.getElementById('cron-loading');
+        var error = document.getElementById('cron-error');
+        var noJobs = document.getElementById('cron-no-jobs');
+        var timelineView = document.getElementById('cron-view-timeline');
+        var heatmapView = document.getElementById('cron-view-heatmap');
+        var timelineBody = document.getElementById('cron-timeline-body');
+        var heatmapCells = null;
+        var dailyHeatmapCells = null;
+        var tableBody = document.getElementById('cron-jobs-table-body');
+        var currentTimeEl = document.getElementById('cron-current-time');
+        var tooltip = document.getElementById('cron-tooltip');
+        var btnTimeline = document.getElementById('cron-btn-timeline');
+        var btnHeatmap = document.getElementById('cron-btn-heatmap');
+        var refreshBtn = document.getElementById('cron-refresh-btn');
+        var timezoneInfo = document.getElementById('cron-timezone-info');
 
-    function init() {
-        displayTimezoneInfo();
-        loadData();
-        setInterval(updateCurrentTime, 60000);
-        
-        btnTimeline.addEventListener('click', function() { switchView('timeline'); });
-        btnHeatmap.addEventListener('click', function() { switchView('heatmap'); });
-        refreshBtn.addEventListener('click', function() { showLoading(); loadData(); });
-    }
+        function init() {
+            heatmapCells = document.querySelectorAll('.cron-heatmap-cell');
+            dailyHeatmapCells = document.querySelectorAll('.cron-daily-heatmap-cell');
+            displayTimezoneInfo();
+            loadData();
+            setInterval(updateCurrentTime, 60000);
 
-    function displayTimezoneInfo() {
-        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        var offset = new Date().getTimezoneOffset();
-        var offsetHours = Math.abs(Math.floor(offset / 60));
-        var offsetMins = Math.abs(offset % 60);
-        var offsetSign = offset <= 0 ? '+' : '-';
-        var offsetStr = 'UTC' + offsetSign + pad(offsetHours) + ':' + pad(offsetMins);
-        timezoneInfo.textContent = 'Displaying times in your local timezone: ' + tz + ' (' + offsetStr + ')';
-    }
+            btnTimeline.addEventListener('click', function() { switchView('timeline'); });
+            btnHeatmap.addEventListener('click', function() { switchView('heatmap'); });
+            refreshBtn.addEventListener('click', function() { showLoading(); loadData(); });
+        }
 
-    function loadData() {
-        var xhr = new XMLHttpRequest();
-        var tzOffset = new Date().getTimezoneOffset();
-        xhr.open('GET', apiUrl + '?tzOffset=' + tzOffset, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        jobsData = data.jobs || [];
-                        render();
-                    } catch (e) {
-                        showError('Failed to parse response: ' + e.message);
+        function displayTimezoneInfo() {
+            var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            var offset = new Date().getTimezoneOffset();
+            var offsetHours = Math.abs(Math.floor(offset / 60));
+            var offsetMins = Math.abs(offset % 60);
+            var offsetSign = offset <= 0 ? '+' : '-';
+            var offsetStr = 'UTC' + offsetSign + pad(offsetHours) + ':' + pad(offsetMins);
+            timezoneInfo.textContent = 'Displaying times in your local timezone: ' + tz + ' (' + offsetStr + ')';
+        }
+
+        function loadData() {
+            var xhr = new XMLHttpRequest();
+            var tzOffset = new Date().getTimezoneOffset();
+            xhr.open('GET', apiUrl + '?tzOffset=' + tzOffset, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            jobsData = data.jobs || [];
+                            render();
+                        } catch (e) {
+                            showError('Failed to parse response: ' + e.message);
+                        }
+                    } else {
+                        showError('Failed to load data: ' + xhr.statusText);
                     }
-                } else {
-                    showError('Failed to load data: ' + xhr.statusText);
+                }
+            };
+            xhr.send();
+        }
+
+        function render() {
+            hideStates();
+
+            if (jobsData.length === 0) {
+                noJobs.classList.add('visible');
+                return;
+            }
+
+            renderTimeline();
+            renderHeatmap();
+            renderDailyHeatmap();
+            showView();
+            updateCurrentTime();
+            initPopovers();
+        }
+
+        function renderTimeline() {
+            var html = '';
+            var now = new Date();
+
+            for (var i = 0; i < jobsData.length; i++) {
+                var job = jobsData[i];
+                html += '<div class="cron-job-row">';
+                html += '<div class="cron-job-name" title="' + esc(job.id) + '">' + esc(job.id);
+                html += '<span class="cron-queue-badge">' + esc(job.queue) + '</span></div>';
+                html += '<div class="cron-job-timeline">';
+
+                for (var h = 0; h < 24; h++) {
+                    html += '<div class="cron-hour-cell"></div>';
+                }
+
+                for (var j = 0; j < job.executions.length; j++) {
+                    var execTime = new Date(job.executions[j]);
+
+                    var hourOfDay = execTime.getHours() + (execTime.getMinutes() / 60);
+                    var leftPercent = (hourOfDay / 24) * 100;
+
+                    var isPast = execTime.getTime() < now.getTime();
+                    var cls = isPast ? 'past' : 'upcoming';
+
+                    html += '<div class="cron-execution-marker ' + cls + '" style="left:' + leftPercent + '%;" ';
+                    html += 'data-job="' + esc(job.id) + '" data-time="' + execTime.toISOString() + '" ';
+                    html += 'data-cron="' + esc(job.cron) + '"></div>';
+                }
+
+                html += '</div></div>';
+            }
+
+            timelineBody.innerHTML = html;
+
+            var markers = timelineBody.querySelectorAll('.cron-execution-marker');
+            for (var k = 0; k < markers.length; k++) {
+                markers[k].addEventListener('mouseenter', showTooltip);
+                markers[k].addEventListener('mouseleave', hideTooltip);
+            }
+        }
+
+        function renderHeatmap() {
+            var hourCounts = [];
+            var hourJobs = [];
+            for (var i = 0; i < 24; i++) {
+                hourCounts[i] = 0;
+                hourJobs[i] = [];
+            }
+
+            for (var i = 0; i < jobsData.length; i++) {
+                for (var j = 0; j < jobsData[i].executions.length; j++) {
+                    var execTime = new Date(jobsData[i].executions[j]);
+                    var h = execTime.getHours();
+                    hourCounts[h]++;
+                    if (hourJobs[h].indexOf(jobsData[i].id) === -1) {
+                        hourJobs[h].push(jobsData[i].id);
+                    }
                 }
             }
-        };
-        xhr.send();
-    }
 
-    function render() {
-        hideStates();
-        
-        if (jobsData.length === 0) {
-            noJobs.classList.add('visible');
-            return;
-        }
+            var max = Math.max.apply(null, hourCounts) || 1;
+            var currentHour = new Date().getHours();
 
-        renderTimeline();
-        renderHeatmap();
-        showView();
-        updateCurrentTime();
-    }
+            for (var i = 0; i < heatmapCells.length; i++) {
+                var cell = heatmapCells[i];
+                var hour = parseInt(cell.getAttribute('data-hour'), 10);
+                var count = hourCounts[hour];
+                var jobs = hourJobs[hour];
+                var intensity = count / max;
 
-    function renderTimeline() {
-        var html = '';
-        var now = new Date();
+                if (count > 0) {
+                    cell.style.backgroundColor = getHeatmapColor(intensity);
+                    cell.textContent = count;
+                } else {
+                    cell.style.backgroundColor = '';
+                    cell.textContent = '';
+                }
 
-        for (var i = 0; i < jobsData.length; i++) {
-            var job = jobsData[i];
-            html += '<div class="cron-job-row">';
-            html += '<div class="cron-job-name" title="' + esc(job.id) + '">' + esc(job.id);
-            html += '<span class="cron-queue-badge">' + esc(job.queue) + '</span></div>';
-            html += '<div class="cron-job-timeline">';
+                // Highlight current hour
+                if (hour === currentHour) {
+                    cell.classList.add('current-hour');
+                } else {
+                    cell.classList.remove('current-hour');
+                }
 
-            for (var h = 0; h < 24; h++) {
-                html += '<div class="cron-hour-cell"></div>';
-            }
-
-            for (var j = 0; j < job.executions.length; j++) {
-                var execTime = new Date(job.executions[j]);
+                // Build popover content
+                var popoverTitle = pad(hour) + ':00 - ' + pad(hour) + ':59';
+                var popoverContent = '<div class="cron-popover-title">' + count + ' execution(s)</div>';
+                if (jobs.length > 0) {
+                    popoverContent += '<div class="cron-popover-jobs"><strong>Jobs:</strong>';
+                    var displayJobs = jobs.slice(0, 10);
+                    for (var j = 0; j < displayJobs.length; j++) {
+                        popoverContent += '<div class="cron-popover-job-item">• ' + esc(displayJobs[j]) + '</div>';
+                    }
+                    if (jobs.length > 10) {
+                        popoverContent += '<div class="cron-popover-job-item"><em>...and ' + (jobs.length - 10) + ' more</em></div>';
+                    }
+                    popoverContent += '</div>';
+                }
                 
-                var hourOfDay = execTime.getHours() + (execTime.getMinutes() / 60);
-                var leftPercent = (hourOfDay / 24) * 100;
-                
-                var isPast = execTime.getTime() < now.getTime();
-                var cls = isPast ? 'past' : 'upcoming';
-
-                html += '<div class="cron-execution-marker ' + cls + '" style="left:' + leftPercent + '%;" ';
-                html += 'data-job="' + esc(job.id) + '" data-time="' + execTime.toISOString() + '" ';
-                html += 'data-cron="' + esc(job.cron) + '"></div>';
+                cell.setAttribute('data-toggle', 'popover');
+                cell.setAttribute('data-trigger', 'hover');
+                cell.setAttribute('data-placement', 'top');
+                cell.setAttribute('data-html', 'true');
+                cell.setAttribute('data-title', popoverTitle);
+                cell.setAttribute('data-content', popoverContent);
             }
 
-            html += '</div></div>';
+            var tableHtml = '';
+            for (var i = 0; i < jobsData.length; i++) {
+                var job = jobsData[i];
+                tableHtml += '<tr>';
+                tableHtml += '<td>' + esc(job.id) + '</td>';
+                tableHtml += '<td><code>' + esc(job.cron) + '</code></td>';
+                tableHtml += '<td><span class="label label-default">' + esc(job.queue) + '</span></td>';
+                tableHtml += '<td>' + job.executions.length + '</td>';
+                tableHtml += '<td>' + (job.nextExecution ? formatDateTime(new Date(job.nextExecution)) : 'N/A') + '</td>';
+                tableHtml += '</tr>';
+            }
+            tableBody.innerHTML = tableHtml;
         }
 
-        timelineBody.innerHTML = html;
+        function renderDailyHeatmap() {
+            var dayCounts = [];
+            var dayJobs = [];
+            for (var i = 0; i < 7; i++) {
+                dayCounts[i] = 0;
+                dayJobs[i] = [];
+            }
 
-        var markers = timelineBody.querySelectorAll('.cron-execution-marker');
-        for (var k = 0; k < markers.length; k++) {
-            markers[k].addEventListener('mouseenter', showTooltip);
-            markers[k].addEventListener('mouseleave', hideTooltip);
-        }
-    }
+            var today = new Date().getDay();
 
-    function renderHeatmap() {
-        var hourCounts = [];
-        for (var i = 0; i < 24; i++) hourCounts[i] = 0;
+            for (var i = 0; i < jobsData.length; i++) {
+                var weeklyExecs = jobsData[i].weeklyExecutions || [];
+                for (var j = 0; j < weeklyExecs.length; j++) {
+                    var execTime = new Date(weeklyExecs[j]);
+                    var dayOfWeek = execTime.getDay();
+                    dayCounts[dayOfWeek]++;
+                    if (dayJobs[dayOfWeek].indexOf(jobsData[i].id) === -1) {
+                        dayJobs[dayOfWeek].push(jobsData[i].id);
+                    }
+                }
+            }
 
-        for (var i = 0; i < jobsData.length; i++) {
-            for (var j = 0; j < jobsData[i].executions.length; j++) {
-                var execTime = new Date(jobsData[i].executions[j]);
-                var h = execTime.getHours();
-                hourCounts[h]++;
+            var max = Math.max.apply(null, dayCounts) || 1;
+            var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+            for (var i = 0; i < dailyHeatmapCells.length; i++) {
+                var cell = dailyHeatmapCells[i];
+                var day = parseInt(cell.getAttribute('data-day'), 10);
+                var count = dayCounts[day];
+                var jobs = dayJobs[day];
+                var intensity = count / max;
+
+                if (count > 0) {
+                    cell.style.backgroundColor = getHeatmapColor(intensity);
+                    cell.textContent = count;
+                } else {
+                    cell.style.backgroundColor = '';
+                    cell.textContent = '';
+                }
+
+                if (day === today) {
+                    cell.classList.add('today');
+                } else {
+                    cell.classList.remove('today');
+                }
+
+                // Build popover content
+                var popoverTitle = dayNames[day];
+                var popoverContent = '<div class="cron-popover-title">' + count + ' execution(s)</div>';
+                if (jobs.length > 0) {
+                    popoverContent += '<div class="cron-popover-jobs"><strong>Jobs:</strong>';
+                    var displayJobs = jobs.slice(0, 10);
+                    for (var j = 0; j < displayJobs.length; j++) {
+                        popoverContent += '<div class="cron-popover-job-item">• ' + esc(displayJobs[j]) + '</div>';
+                    }
+                    if (jobs.length > 10) {
+                        popoverContent += '<div class="cron-popover-job-item"><em>...and ' + (jobs.length - 10) + ' more</em></div>';
+                    }
+                    popoverContent += '</div>';
+                }
+
+                cell.setAttribute('data-toggle', 'popover');
+                cell.setAttribute('data-trigger', 'hover');
+                cell.setAttribute('data-placement', 'bottom');
+                cell.setAttribute('data-html', 'true');
+                cell.setAttribute('data-title', popoverTitle);
+                cell.setAttribute('data-content', popoverContent);
             }
         }
 
-        var max = Math.max.apply(null, hourCounts) || 1;
+        function initPopovers() {
+            // Destroy existing popovers first
+            destroyPopovers();
+            
+            // Initialize Bootstrap popovers if jQuery and Bootstrap are available
+            if (typeof $ !== 'undefined' && $.fn.popover) {
+                $('.cron-schedule-container [data-toggle="popover"]').popover({
+                    container: 'body',
+                    trigger: 'hover'
+                });
+            }
+        }
 
-        for (var i = 0; i < heatmapCells.length; i++) {
-            var cell = heatmapCells[i];
-            var hour = parseInt(cell.getAttribute('data-hour'), 10);
-            var count = hourCounts[hour];
-            var intensity = count / max;
+        function destroyPopovers() {
+            if (typeof $ !== 'undefined' && $.fn.popover) {
+                $('.cron-schedule-container [data-toggle="popover"]').popover('destroy');
+            }
+        }
 
-            if (count > 0) {
-                cell.style.backgroundColor = getHeatmapColor(intensity);
-                cell.textContent = count;
+        function getHeatmapColor(intensity) {
+            var r, g, b;
+
+            if (intensity <= 0.25) {
+                r = Math.round(76 + (180 * (intensity / 0.25)));
+                g = 175;
+                b = 80;
+            } else if (intensity <= 0.5) {
+                var t = (intensity - 0.25) / 0.25;
+                r = Math.round(180 + (75 * t));
+                g = Math.round(175 + (30 * t));
+                b = Math.round(80 - (40 * t));
+            } else if (intensity <= 0.75) {
+                var t = (intensity - 0.5) / 0.25;
+                r = 255;
+                g = Math.round(205 - (100 * t));
+                b = Math.round(40 - (20 * t));
             } else {
-                cell.style.backgroundColor = '';
-                cell.textContent = '';
+                var t = (intensity - 0.75) / 0.25;
+                r = 255;
+                g = Math.round(105 - (75 * t));
+                b = Math.round(20 + (30 * t));
             }
-            cell.title = pad(hour) + ':00 - ' + count + ' execution(s)';
+
+            return 'rgb(' + r + ',' + g + ',' + b + ')';
         }
 
-        var tableHtml = '';
-        for (var i = 0; i < jobsData.length; i++) {
-            var job = jobsData[i];
-            tableHtml += '<tr>';
-            tableHtml += '<td>' + esc(job.id) + '</td>';
-            tableHtml += '<td><code>' + esc(job.cron) + '</code></td>';
-            tableHtml += '<td><span class="label label-default">' + esc(job.queue) + '</span></td>';
-            tableHtml += '<td>' + job.executions.length + '</td>';
-            tableHtml += '<td>' + (job.nextExecution ? formatDateTime(new Date(job.nextExecution)) : 'N/A') + '</td>';
-            tableHtml += '</tr>';
-        }
-        tableBody.innerHTML = tableHtml;
-    }
+        function updateCurrentTime() {
+            var timeline = document.getElementById('cron-timeline');
+            if (!timeline || jobsData.length === 0) return;
 
-    function getHeatmapColor(intensity) {
-        var r, g, b;
-        
-        if (intensity <= 0.25) {
-            r = Math.round(76 + (180 * (intensity / 0.25)));
-            g = 175;
-            b = 80;
-        } else if (intensity <= 0.5) {
-            var t = (intensity - 0.25) / 0.25;
-            r = Math.round(180 + (75 * t));
-            g = Math.round(175 + (30 * t));
-            b = Math.round(80 - (40 * t));
-        } else if (intensity <= 0.75) {
-            var t = (intensity - 0.5) / 0.25;
-            r = 255;
-            g = Math.round(205 - (100 * t));
-            b = Math.round(40 - (20 * t));
+            var now = new Date();
+            var nowHour = now.getHours() + (now.getMinutes() / 60);
+            var width = timeline.offsetWidth - 200;
+            currentTimeEl.style.left = (200 + (nowHour / 24) * width) + 'px';
+        }
+
+        function showTooltip(e) {
+            var el = e.target;
+            var execTime = new Date(el.getAttribute('data-time'));
+            tooltip.innerHTML = '<strong>' + esc(el.getAttribute('data-job')) + '</strong><br>' +
+                'Time: ' + formatDateTime(execTime) + '<br>' +
+                'Cron: ' + esc(el.getAttribute('data-cron'));
+
+            var rect = el.getBoundingClientRect();
+            tooltip.classList.add('visible');
+            tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+            tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove('visible');
+        }
+
+        function switchView(view) {
+            currentView = view;
+            btnTimeline.className = 'btn btn-sm ' + (view === 'timeline' ? 'btn-primary' : 'btn-default');
+            btnHeatmap.className = 'btn btn-sm ' + (view === 'heatmap' ? 'btn-primary' : 'btn-default');
+            showView();
+        }
+
+        function showView() {
+            timelineView.className = 'cron-view-panel' + (currentView === 'timeline' ? ' active' : '');
+            heatmapView.className = 'cron-view-panel' + (currentView === 'heatmap' ? ' active' : '');
+        }
+
+        function showLoading() {
+            hideStates();
+            loading.classList.add('visible');
+        }
+
+        function showError(msg) {
+            hideStates();
+            error.textContent = msg;
+            error.classList.add('visible');
+        }
+
+        function hideStates() {
+            loading.classList.remove('visible');
+            error.classList.remove('visible');
+            noJobs.classList.remove('visible');
+        }
+
+        function esc(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function pad(n) {
+            return n < 10 ? '0' + n : n;
+        }
+
+        function formatTime(d) {
+            return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+        }
+
+        function formatDateTime(d) {
+            return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + formatTime(d);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
         } else {
-            var t = (intensity - 0.75) / 0.25;
-            r = 255;
-            g = Math.round(105 - (75 * t));
-            b = Math.round(20 + (30 * t));
+            init();
         }
-        
-        return 'rgb(' + r + ',' + g + ',' + b + ')';
-    }
-
-    function updateCurrentTime() {
-        var timeline = document.getElementById('cron-timeline');
-        if (!timeline || jobsData.length === 0) return;
-
-        var now = new Date();
-        var nowHour = now.getHours() + (now.getMinutes() / 60);
-        var width = timeline.offsetWidth - 200;
-        currentTimeEl.style.left = (200 + (nowHour / 24) * width) + 'px';
-    }
-
-    function showTooltip(e) {
-        var el = e.target;
-        var execTime = new Date(el.getAttribute('data-time'));
-        tooltip.innerHTML = '<strong>' + esc(el.getAttribute('data-job')) + '</strong><br>' +
-            'Time: ' + formatDateTime(execTime) + '<br>' +
-            'Cron: ' + esc(el.getAttribute('data-cron'));
-
-        var rect = el.getBoundingClientRect();
-        tooltip.classList.add('visible');
-        tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
-        tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
-    }
-
-    function hideTooltip() {
-        tooltip.classList.remove('visible');
-    }
-
-    function switchView(view) {
-        currentView = view;
-        btnTimeline.className = 'btn btn-sm ' + (view === 'timeline' ? 'btn-primary' : 'btn-default');
-        btnHeatmap.className = 'btn btn-sm ' + (view === 'heatmap' ? 'btn-primary' : 'btn-default');
-        showView();
-    }
-
-    function showView() {
-        timelineView.className = 'cron-view-panel' + (currentView === 'timeline' ? ' active' : '');
-        heatmapView.className = 'cron-view-panel' + (currentView === 'heatmap' ? ' active' : '');
-    }
-
-    function showLoading() {
-        hideStates();
-        loading.classList.add('visible');
-    }
-
-    function showError(msg) {
-        hideStates();
-        error.textContent = msg;
-        error.classList.add('visible');
-    }
-
-    function hideStates() {
-        loading.classList.remove('visible');
-        error.classList.remove('visible');
-        noJobs.classList.remove('visible');
-    }
-
-    function esc(text) {
-        if (!text) return '';
-        var div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    function pad(n) {
-        return n < 10 ? '0' + n : n;
-    }
-
-    function formatTime(d) {
-        return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
-    }
-
-    function formatDateTime(d) {
-        return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + formatTime(d);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-})();
+    })();
 </script>
