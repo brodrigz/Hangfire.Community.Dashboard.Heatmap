@@ -89,26 +89,44 @@ namespace Hangfire.Community.Dashboard.Heatmap
                     WeeklyExecutions = new List<DateTime>()
                 };
 
+                var jobTimeZone = TryGetTimeZone(job.TimeZoneId, out var tz) ? tz : TimeZoneInfo.Utc;
+
                 //calculate all executions times for today
-                var nextOccurrence = cronExpression.GetNextOccurrence(startOfDayUtc, TimeZoneInfo.Utc);
+                var nextOccurrence = cronExpression.GetNextOccurrence(startOfDayUtc, jobTimeZone);
                 while (nextOccurrence.HasValue && nextOccurrence.Value < endOfDayUtc)
                 {
                     scheduleInfo.Executions.Add(nextOccurrence.Value);
-                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, TimeZoneInfo.Utc);
+                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, jobTimeZone);
                 }
 
                 //calculate all executions times for the week
-                nextOccurrence = cronExpression.GetNextOccurrence(startOfWeekUtc, TimeZoneInfo.Utc);
+                nextOccurrence = cronExpression.GetNextOccurrence(startOfWeekUtc, jobTimeZone);
                 while (nextOccurrence.HasValue && nextOccurrence.Value < endOfWeekUtc)
                 {
                     scheduleInfo.WeeklyExecutions.Add(nextOccurrence.Value);
-                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, TimeZoneInfo.Utc);
+                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, jobTimeZone);
                 }
 
                 result.Add(scheduleInfo);
             }
 
             return result;
+        }
+
+        private static bool TryGetTimeZone(string timeZoneId, out TimeZoneInfo result)
+        {
+            result = null;
+            if (string.IsNullOrWhiteSpace(timeZoneId))
+                return false;
+            try
+            {
+                result = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool TryParseCron(string cronExpression, out CronExpression result)
