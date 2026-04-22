@@ -62,13 +62,13 @@ namespace Hangfire.Community.Dashboard.Heatmap
             //get client timezone start and end of day in UTC
             var clientLocalNow = utcNow.AddMinutes(-clientOffsetMinutes);
             var clientLocalMidnight = new DateTime(clientLocalNow.Year, clientLocalNow.Month, clientLocalNow.Day, 0, 0, 0, DateTimeKind.Utc);
-            var startOfDayUtc = clientLocalMidnight.AddMinutes(clientOffsetMinutes);
+            var startOfDayUtc = clientLocalMidnight.AddMinutes(clientOffsetMinutes).AddSeconds(-1);
             var endOfDayUtc = startOfDayUtc.AddDays(1);
 
             //calculate start of week for weekly heatmap
             var daysFromSunday = (int)clientLocalNow.DayOfWeek;
             var clientLocalWeekStart = clientLocalMidnight.AddDays(-daysFromSunday);
-            var startOfWeekUtc = clientLocalWeekStart.AddMinutes(clientOffsetMinutes);
+            var startOfWeekUtc = clientLocalWeekStart.AddMinutes(clientOffsetMinutes).AddSeconds(-1);
             var endOfWeekUtc = startOfWeekUtc.AddDays(7);
 
             foreach (var job in recurringJobs)
@@ -125,6 +125,7 @@ namespace Hangfire.Community.Dashboard.Heatmap
             }
             catch
             {
+                Console.WriteLine($"{timeZoneId} not found"); // maybe use ILogger here later
                 return false;
             }
         }
