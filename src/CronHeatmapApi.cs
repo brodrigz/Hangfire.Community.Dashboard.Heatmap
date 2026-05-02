@@ -62,13 +62,13 @@ namespace Hangfire.Community.Dashboard.Heatmap
             //get client timezone start and end of day in UTC
             var clientLocalNow = utcNow.AddMinutes(-clientOffsetMinutes);
             var clientLocalMidnight = new DateTime(clientLocalNow.Year, clientLocalNow.Month, clientLocalNow.Day, 0, 0, 0, DateTimeKind.Utc);
-            var startOfDayUtc = clientLocalMidnight.AddMinutes(clientOffsetMinutes);
+            var startOfDayUtc = clientLocalMidnight.AddMinutes(clientOffsetMinutes).AddSeconds(-1);
             var endOfDayUtc = startOfDayUtc.AddDays(1);
 
             //calculate start of week for weekly heatmap
             var daysFromSunday = (int)clientLocalNow.DayOfWeek;
             var clientLocalWeekStart = clientLocalMidnight.AddDays(-daysFromSunday);
-            var startOfWeekUtc = clientLocalWeekStart.AddMinutes(clientOffsetMinutes);
+            var startOfWeekUtc = clientLocalWeekStart.AddMinutes(clientOffsetMinutes).AddSeconds(-1);
             var endOfWeekUtc = startOfWeekUtc.AddDays(7);
 
             foreach (var job in recurringJobs)
@@ -89,26 +89,45 @@ namespace Hangfire.Community.Dashboard.Heatmap
                     WeeklyExecutions = new List<DateTime>()
                 };
 
+                var jobTimeZone = TryGetTimeZone(job.TimeZoneId, out var tz) ? tz : TimeZoneInfo.Utc;
+
                 //calculate all executions times for today
-                var nextOccurrence = cronExpression.GetNextOccurrence(startOfDayUtc, TimeZoneInfo.Utc);
+                var nextOccurrence = cronExpression.GetNextOccurrence(startOfDayUtc, jobTimeZone);
                 while (nextOccurrence.HasValue && nextOccurrence.Value < endOfDayUtc)
                 {
                     scheduleInfo.Executions.Add(nextOccurrence.Value);
-                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, TimeZoneInfo.Utc);
+                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, jobTimeZone);
                 }
 
                 //calculate all executions times for the week
-                nextOccurrence = cronExpression.GetNextOccurrence(startOfWeekUtc, TimeZoneInfo.Utc);
+                nextOccurrence = cronExpression.GetNextOccurrence(startOfWeekUtc, jobTimeZone);
                 while (nextOccurrence.HasValue && nextOccurrence.Value < endOfWeekUtc)
                 {
                     scheduleInfo.WeeklyExecutions.Add(nextOccurrence.Value);
-                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, TimeZoneInfo.Utc);
+                    nextOccurrence = cronExpression.GetNextOccurrence(nextOccurrence.Value, jobTimeZone);
                 }
 
                 result.Add(scheduleInfo);
             }
 
             return result;
+        }
+
+        private static bool TryGetTimeZone(string timeZoneId, out TimeZoneInfo result)
+        {
+            result = null;
+            if (string.IsNullOrWhiteSpace(timeZoneId))
+                return false;
+            try
+            {
+                result = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+                return true;
+            }
+            catch
+            {
+                Console.WriteLine($"{timeZoneId} not found"); // maybe use ILogger here later
+                return false;
+            }
         }
 
         private bool TryParseCron(string cronExpression, out CronExpression result)
