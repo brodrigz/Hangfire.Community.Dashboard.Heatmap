@@ -12,6 +12,8 @@ Visualize your recurring job schedules at a glance with an timeline showing past
 <img width="1865" height="876" alt="image" src="https://github.com/user-attachments/assets/5368b8a6-e8a8-4dcd-a813-f882a34585d7" />
 <img width="1853" height="872" alt="image" src="https://github.com/user-attachments/assets/d69b0f15-4e9e-4042-b49b-9c254a883251" />
 
+<sub>Obs:  Hangfire 1.8.x is required for dark mode</sub>
+
 ---
 
 
@@ -66,7 +68,7 @@ namespace Application
 
 ## Requirements
 
-- Hangfire 1.7.0 or later
+- Hangfire 1.8.0 or later <sub>(works on 1.7 but dark mode detection will be broken)</sub>
 - .NET Standard 2.0 / .NET Framework 4.6.1 / .NET Core 2.0 or later
 ---
 
