@@ -1,7 +1,7 @@
 ﻿# Hangfire.Community.Dashboard.Heatmap
 
-![MIT License](https://img.shields.io/badge/license-MIT-orange.svg)
-![NuGet](https://img.shields.io/nuget/v/Hangfire.Community.Dashboard.Heatmap.svg)
+[![MIT License](https://img.shields.io/badge/license-MIT-orange.svg)](https://github.com/brodrigz/Hangfire.Community.Dashboard.Heatmap/blob/master/LICENSE.md)
+[![NuGet](https://img.shields.io/nuget/v/Hangfire.Community.Dashboard.Heatmap.svg)](https://www.nuget.org/packages/Hangfire.Community.Dashboard.Heatmap/)
 
 Hangfire.Community.Dashboard.Heatmap adds a visual timeline and heatmap view to your Hangfire Dashboard, letting you see exactly when your recurring jobs are scheduled to run throughout the day.
 
