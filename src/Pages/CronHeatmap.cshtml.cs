@@ -15,31 +15,31 @@ namespace Hangfire.Community.Dashboard.Heatmap.Pages
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    
+
     #line 3 "..\..\Pages\CronHeatmap.cshtml"
     using Hangfire.Community.Dashboard.Heatmap;
-    
+
     #line default
     #line hidden
-    
+
     #line 4 "..\..\Pages\CronHeatmap.cshtml"
     using Hangfire.Community.Dashboard.Heatmap.Pages;
-    
+
     #line default
     #line hidden
-    
+
     #line 2 "..\..\Pages\CronHeatmap.cshtml"
     using Hangfire.Dashboard;
-    
+
     #line default
     #line hidden
-    
+
     #line 5 "..\..\Pages\CronHeatmap.cshtml"
     using Hangfire.Dashboard.Pages;
-    
+
     #line default
     #line hidden
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     internal partial class CronHeatmap : Hangfire.Dashboard.RazorPage
     {
@@ -57,16 +57,16 @@ WriteLiteral("\r\n");
 
 
 
-            
+
             #line 7 "..\..\Pages\CronHeatmap.cshtml"
-  
+
     Layout = new LayoutPage(Title);
     var apiUrl = $"{Url.To(GlobalConfigurationExtension.RouteBase)}/api/recurring-jobs";
     var version = typeof(GlobalConfigurationExtension).Assembly.GetName().Version;
     var versionString = $"v{version.Major}.{version.Minor}.{version.Build}";
 
 
-            
+
             #line default
             #line hidden
 WriteLiteral("\r\n<style>\r\n    /* ===== Base Styles ===== */\r\n    .cron-schedule-container {\r\n   " +
@@ -137,52 +137,55 @@ WriteLiteral("\r\n<style>\r\n    /* ===== Base Styles ===== */\r\n    .cron-sche
 ": none;\r\n    }\r\n\r\n        .cron-state.visible {\r\n            display: block;\r\n  " +
 "      }\r\n\r\n    .cron-loading {\r\n        color: #333;\r\n    }\r\n\r\n    .cron-no-jobs" +
 " {\r\n        color: #6c757d;\r\n    }\r\n\r\n    .cron-error {\r\n        color: #dc3545;" +
-"\r\n    }\r\n\r\n    /* Heatmap */\r\n    .cron-heatmap {\r\n        display: grid;\r\n     " +
-"   grid-template-columns: repeat(24, 1fr);\r\n        gap: 2px;\r\n        margin-bo" +
-"ttom: 20px;\r\n    }\r\n\r\n    .cron-heatmap-cell {\r\n        aspect-ratio: 1;\r\n      " +
-"  border-radius: 4px;\r\n        display: flex;\r\n        align-items: center;\r\n   " +
-"     justify-content: center;\r\n        font-size: 10px;\r\n        color: white;\r\n" +
-"        font-weight: bold;\r\n        cursor: pointer;\r\n        transition: transf" +
-"orm 0.2s;\r\n        background: #e9ecef;\r\n    }\r\n\r\n        .cron-heatmap-cell:hov" +
-"er {\r\n            transform: scale(1.1);\r\n        }\r\n\r\n        .cron-heatmap-cel" +
-"l.current-hour {\r\n            outline: 3px solid #007bff;\r\n            outline-o" +
-"ffset: 2px;\r\n        }\r\n\r\n    .cron-heatmap-labels {\r\n        display: flex;\r\n  " +
-"      justify-content: space-between;\r\n        font-size: 11px;\r\n        color: " +
-"#6c757d;\r\n    }\r\n\r\n    /* Daily Heatmap */\r\n    .cron-daily-heatmap {\r\n        d" +
-"isplay: grid;\r\n        grid-template-columns: repeat(7, 1fr);\r\n        gap: 4px;" +
-"\r\n        margin-bottom: 10px;\r\n        max-width: 500px;\r\n    }\r\n\r\n    .cron-da" +
-"ily-heatmap-cell {\r\n        aspect-ratio: 1;\r\n        border-radius: 4px;\r\n     " +
-"   display: flex;\r\n        align-items: center;\r\n        justify-content: center" +
-";\r\n        font-size: 12px;\r\n        color: white;\r\n        font-weight: bold;\r\n" +
-"        cursor: pointer;\r\n        transition: transform 0.2s;\r\n        backgroun" +
-"d: #e9ecef;\r\n        min-height: 50px;\r\n    }\r\n\r\n        .cron-daily-heatmap-cel" +
-"l:hover {\r\n            transform: scale(1.05);\r\n        }\r\n\r\n        .cron-daily" +
-"-heatmap-cell.today {\r\n            outline: 3px solid #007bff;\r\n            outl" +
-"ine-offset: 2px;\r\n        }\r\n\r\n    .cron-daily-heatmap-labels {\r\n        display" +
-": grid;\r\n        grid-template-columns: repeat(7, 1fr);\r\n        gap: 4px;\r\n    " +
-"    max-width: 500px;\r\n        font-size: 11px;\r\n        color: #6c757d;\r\n      " +
-"  text-align: center;\r\n    }\r\n\r\n    /* Queue badge */\r\n    .cron-queue-badge {\r\n" +
-"        display: inline-block;\r\n        padding: 2px 6px;\r\n        border-radius" +
-": 3px;\r\n        font-size: 10px;\r\n        margin-left: 5px;\r\n        background:" +
-" #6c757d;\r\n        color: white;\r\n    }\r\n\r\n    /* View toggle */\r\n    .cron-view" +
-"-toggle {\r\n        margin-bottom: 15px;\r\n    }\r\n\r\n        .cron-view-toggle .btn" +
-" {\r\n            margin-right: 5px;\r\n        }\r\n\r\n    /* View panels */\r\n    .cro" +
-"n-view-panel {\r\n        display: none;\r\n    }\r\n\r\n        .cron-view-panel.active" +
-" {\r\n            display: block;\r\n        }\r\n\r\n    /* Jobs table */\r\n    .cron-jo" +
-"bs-table {\r\n        background: #fff;\r\n        border-radius: 4px;\r\n    }\r\n\r\n   " +
-"     .cron-jobs-table th {\r\n            background: #f8f9fa;\r\n            color:" +
-" #333;\r\n        }\r\n\r\n        .cron-jobs-table td {\r\n            color: #333;\r\n  " +
-"      }\r\n\r\n        .cron-jobs-table code {\r\n            background: #e9ecef;\r\n  " +
-"          color: #333;\r\n            padding: 2px 6px;\r\n            border-radius" +
-": 3px;\r\n        }\r\n\r\n    .cron-timezone-info {\r\n        font-size: 12px;\r\n      " +
-"  color: #6c757d;\r\n        margin-bottom: 10px;\r\n    }\r\n\r\n    /* Popover custom " +
-"styles */\r\n    .cron-schedule-container .popover {\r\n        max-width: 350px;\r\n " +
-"   }\r\n\r\n    .cron-schedule-container .popover-content {\r\n        font-size: 12px" +
-";\r\n        white-space: pre-line;\r\n    }\r\n\r\n    .cron-popover-title {\r\n        f" +
-"ont-weight: bold;\r\n        margin-bottom: 5px;\r\n    }\r\n\r\n    .cron-popover-jobs " +
-"{\r\n        margin-top: 8px;\r\n        padding-top: 8px;\r\n        border-top: 1px " +
-"solid #eee;\r\n    }\r\n\r\n    .cron-popover-job-item {\r\n        padding: 2px 0;\r\n   " +
-"     font-size: 11px;\r\n    }\r\n\r\n    /* ===== Dark Mode ===== */\r\n    ");
+"\r\n    }\r\n\r\n    /* Heatmap */\r\n    .cron-heatmap {\n        display: grid;\n       " +
+" grid-template-columns: repeat(24, 1fr);\n        gap: 2px;\n        margin-bottom" +
+": 20px;\n    }\n\n    .cron-minute-heatmap {\n        display: grid;\n        grid-te" +
+"mplate-columns: repeat(30, 1fr);\n        gap: 2px;\n        margin-bottom: 20px;\n" +
+"    }\n\r\n    .cron-heatmap-cell {\r\n        aspect-ratio: 1;\r\n        border-radiu" +
+"s: 4px;\r\n        display: flex;\r\n        align-items: center;\r\n        justify-c" +
+"ontent: center;\r\n        font-size: 10px;\r\n        color: white;\r\n        font-w" +
+"eight: bold;\r\n        cursor: pointer;\r\n        transition: transform 0.2s;\r\n   " +
+"     background: #e9ecef;\r\n    }\r\n\r\n        .cron-heatmap-cell:hover {\r\n        " +
+"    transform: scale(1.1);\r\n        }\r\n\r\n        .cron-heatmap-cell.current-hour" +
+" {\n            outline: 3px solid #007bff;\n            outline-offset: 2px;\n    " +
+"    }\n\n        .cron-heatmap-cell.selected,\n        .cron-daily-heatmap-cell.sel" +
+"ected {\n            outline: 3px solid #28a745;\n            outline-offset: 2px;" +
+"\n        }\n\n    .cron-minute-heatmap .cron-heatmap-cell {\n        aspect-ratio: " +
+"auto;\n        min-height: 24px;\n        font-size: 9px;\n    }\n\n    .cron-minute-" +
+"section {\n        display: none;\n    }\n\n        .cron-minute-section.visible {\n " +
+"           display: block;\n        }\n\r\n    .cron-heatmap-labels {\r\n        displ" +
+"ay: flex;\r\n        justify-content: space-between;\r\n        font-size: 11px;\r\n  " +
+"      color: #6c757d;\r\n    }\r\n\r\n    /* Daily Heatmap */\r\n    .cron-daily-heatmap" +
+" {\r\n        display: grid;\r\n        grid-template-columns: repeat(7, 1fr);\r\n    " +
+"    gap: 4px;\r\n        margin-bottom: 10px;\r\n        max-width: 500px;\r\n    }\r\n\r" +
+"\n    .cron-daily-heatmap-cell {\r\n        aspect-ratio: 1;\r\n        border-radius" +
+": 4px;\r\n        display: flex;\r\n        align-items: center;\r\n        justify-co" +
+"ntent: center;\r\n        font-size: 12px;\r\n        color: white;\r\n        font-we" +
+"ight: bold;\r\n        cursor: pointer;\r\n        transition: transform 0.2s;\r\n    " +
+"    background: #e9ecef;\r\n        min-height: 50px;\r\n    }\r\n\r\n        .cron-dail" +
+"y-heatmap-cell:hover {\r\n            transform: scale(1.05);\r\n        }\r\n\r\n      " +
+"  .cron-daily-heatmap-cell.today {\r\n            outline: 3px solid #007bff;\r\n   " +
+"         outline-offset: 2px;\r\n        }\r\n\r\n    .cron-daily-heatmap-labels {\r\n  " +
+"      display: grid;\r\n        grid-template-columns: repeat(7, 1fr);\r\n        ga" +
+"p: 4px;\r\n        max-width: 500px;\r\n        font-size: 11px;\r\n        color: #6c" +
+"757d;\r\n        text-align: center;\r\n    }\r\n\r\n    /* Queue badge */\r\n    .cron-qu" +
+"eue-badge {\r\n        display: inline-block;\r\n        padding: 2px 6px;\r\n        " +
+"border-radius: 3px;\r\n        font-size: 10px;\r\n        margin-left: 5px;\r\n      " +
+"  background: #6c757d;\r\n        color: white;\r\n    }\r\n\r\n    /* Jobs table */\n   " +
+" .cron-jobs-table {\r\n        background: #fff;\r\n        border-radius: 4px;\r\n   " +
+" }\r\n\r\n        .cron-jobs-table th {\r\n            background: #f8f9fa;\r\n         " +
+"   color: #333;\r\n        }\r\n\r\n        .cron-jobs-table td {\r\n            color: " +
+"#333;\r\n        }\r\n\r\n        .cron-jobs-table code {\r\n            background: #e9" +
+"ecef;\r\n            color: #333;\r\n            padding: 2px 6px;\r\n            bord" +
+"er-radius: 3px;\r\n        }\r\n\r\n    .cron-timezone-info {\r\n        font-size: 12px" +
+";\r\n        color: #6c757d;\r\n        margin-bottom: 10px;\r\n    }\r\n\r\n    /* Popove" +
+"r custom styles */\r\n    .cron-schedule-container .popover {\r\n        max-width: " +
+"350px;\r\n    }\r\n\r\n    .cron-schedule-container .popover-content {\r\n        font-s" +
+"ize: 12px;\r\n        white-space: pre-line;\r\n    }\r\n\r\n    .cron-popover-title {\r\n" +
+"        font-weight: bold;\r\n        margin-bottom: 5px;\r\n    }\r\n\r\n    .cron-popo" +
+"ver-jobs {\r\n        margin-top: 8px;\r\n        padding-top: 8px;\r\n        border-" +
+"top: 1px solid #eee;\r\n    }\r\n\r\n    .cron-popover-job-item {\r\n        padding: 2p" +
+"x 0;\r\n        font-size: 11px;\r\n    }\r\n\r\n    /* ===== Dark Mode ===== */\r\n    ");
 
 
 WriteLiteral("@media (prefers-color-scheme: dark) {\r\n        .cron-schedule-header h2 {\r\n      " +
@@ -215,153 +218,115 @@ WriteLiteral("@media (prefers-color-scheme: dark) {\r\n        .cron-schedule-he
 "}\r\n\r\n        .cron-no-jobs {\r\n            color: #868e96;\r\n        }\r\n\r\n        " +
 ".cron-error {\r\n            color: #ff6b6b;\r\n        }\r\n\r\n        .cron-heatmap-c" +
 "ell {\r\n            background: #2d2d44;\r\n        }\r\n\r\n        .cron-heatmap-cell" +
-".current-hour {\r\n            outline-color: #4dabf7;\r\n        }\r\n\r\n        .cron" +
-"-heatmap-labels {\r\n            color: #868e96;\r\n        }\r\n\r\n        .cron-daily" +
-"-heatmap-cell {\r\n            background: #2d2d44;\r\n        }\r\n\r\n            .cro" +
-"n-daily-heatmap-cell.today {\r\n                outline-color: #4dabf7;\r\n         " +
-"   }\r\n\r\n        .cron-daily-heatmap-labels {\r\n            color: #868e96;\r\n     " +
-"   }\r\n\r\n        .cron-queue-badge {\r\n            background: #495057;\r\n         " +
-"   color: #e9ecef;\r\n        }\r\n\r\n        .cron-jobs-table {\r\n            backgro" +
-"und: #1a1a2e;\r\n        }\r\n\r\n            .cron-jobs-table th {\r\n                b" +
-"ackground: #16213e;\r\n                color: #e9ecef;\r\n                border-col" +
-"or: #2d2d44;\r\n            }\r\n\r\n            .cron-jobs-table td {\r\n              " +
-"  color: #e9ecef;\r\n                border-color: #2d2d44;\r\n            }\r\n\r\n    " +
-"        .cron-jobs-table code {\r\n                background: #2d2d44;\r\n         " +
-"       color: #4dabf7;\r\n            }\r\n\r\n            .cron-jobs-table tr:nth-chi" +
-"ld(even) {\r\n                background: #16213e;\r\n            }\r\n\r\n            ." +
-"cron-jobs-table tr:nth-child(odd) {\r\n                background: #1a1a2e;\r\n     " +
-"       }\r\n\r\n            .cron-jobs-table .label-default {\r\n                backg" +
-"round: #495057;\r\n                color: #e9ecef;\r\n            }\r\n\r\n        .cron" +
-"-schedule-container h4 {\r\n            color: #e9ecef;\r\n        }\r\n\r\n        .cro" +
-"n-timezone-info {\r\n            color: #868e96;\r\n        }\r\n\r\n        .cron-versi" +
-"on-badge {\r\n            background: #2d2d44;\r\n            border-color: #495057;" +
-"\r\n            color: #868e96;\r\n        }\r\n\r\n        /* Popover dark mode - globa" +
-"l styles since popovers are appended to body */\r\n        .popover {\r\n           " +
-" background-color: #1a1a2e;\r\n            border-color: #2d2d44;\r\n        }\r\n\r\n  " +
-"      .popover-title {\r\n            background-color: #16213e;\r\n            bord" +
-"er-bottom-color: #2d2d44;\r\n            color: #e9ecef;\r\n        }\r\n\r\n        .po" +
-"pover-content {\r\n            color: #e9ecef;\r\n        }\r\n\r\n        .popover.top " +
-"> .arrow {\r\n            border-top-color: #2d2d44;\r\n        }\r\n\r\n        .popove" +
-"r.top > .arrow::after {\r\n            border-top-color: #1a1a2e;\r\n        }\r\n\r\n  " +
-"      .popover.bottom > .arrow {\r\n            border-bottom-color: #2d2d44;\r\n   " +
-"     }\r\n\r\n        .popover.bottom > .arrow::after {\r\n            border-bottom-c" +
-"olor: #1a1a2e;\r\n        }\r\n\r\n        .popover.left > .arrow {\r\n            borde" +
-"r-left-color: #2d2d44;\r\n        }\r\n\r\n        .popover.left > .arrow::after {\r\n  " +
-"          border-left-color: #1a1a2e;\r\n        }\r\n\r\n        .popover.right > .ar" +
-"row {\r\n            border-right-color: #2d2d44;\r\n        }\r\n\r\n        .popover.r" +
-"ight > .arrow::after {\r\n            border-right-color: #1a1a2e;\r\n        }\r\n\r\n " +
-"       .cron-popover-jobs {\r\n            border-top-color: #2d2d44;\r\n        }\r\n" +
-"    }\r\n</style>\r\n\r\n<div class=\"cron-schedule-container\">\r\n    <!-- Header -->\r\n " +
-"   <div class=\"cron-schedule-header\">\r\n        <h2>");
+".current-hour {\n            outline-color: #4dabf7;\n        }\n\n        .cron-hea" +
+"tmap-cell.selected,\n        .cron-daily-heatmap-cell.selected {\n            outl" +
+"ine-color: #51cf66;\n        }\n\n        .cron-heatmap-labels {\n            color:" +
+" #868e96;\n        }\n\r\n        .cron-daily-heatmap-cell {\r\n            background" +
+": #2d2d44;\r\n        }\r\n\r\n            .cron-daily-heatmap-cell.today {\r\n         " +
+"       outline-color: #4dabf7;\r\n            }\r\n\r\n        .cron-daily-heatmap-lab" +
+"els {\r\n            color: #868e96;\r\n        }\r\n\r\n        .cron-queue-badge {\r\n  " +
+"          background: #495057;\r\n            color: #e9ecef;\r\n        }\r\n\r\n      " +
+"  .cron-jobs-table {\r\n            background: #1a1a2e;\r\n        }\r\n\r\n           " +
+" .cron-jobs-table th {\r\n                background: #16213e;\r\n                co" +
+"lor: #e9ecef;\r\n                border-color: #2d2d44;\r\n            }\r\n\r\n        " +
+"    .cron-jobs-table td {\r\n                color: #e9ecef;\r\n                bord" +
+"er-color: #2d2d44;\r\n            }\r\n\r\n            .cron-jobs-table code {\r\n      " +
+"          background: #2d2d44;\r\n                color: #4dabf7;\r\n            }\r\n" +
+"\r\n            .cron-jobs-table tr:nth-child(even) {\r\n                background:" +
+" #16213e;\r\n            }\r\n\r\n            .cron-jobs-table tr:nth-child(odd) {\r\n  " +
+"              background: #1a1a2e;\r\n            }\r\n\r\n            .cron-jobs-tabl" +
+"e .label-default {\r\n                background: #495057;\r\n                color:" +
+" #e9ecef;\r\n            }\r\n\r\n        .cron-schedule-container h4 {\r\n            c" +
+"olor: #e9ecef;\r\n        }\r\n\r\n        .cron-timezone-info {\r\n            color: #" +
+"868e96;\r\n        }\r\n\r\n        .cron-version-badge {\r\n            background: #2d" +
+"2d44;\r\n            border-color: #495057;\r\n            color: #868e96;\r\n        " +
+"}\r\n\r\n        /* Popover dark mode - global styles since popovers are appended to" +
+" body */\r\n        .popover {\r\n            background-color: #1a1a2e;\r\n          " +
+"  border-color: #2d2d44;\r\n        }\r\n\r\n        .popover-title {\r\n            bac" +
+"kground-color: #16213e;\r\n            border-bottom-color: #2d2d44;\r\n            " +
+"color: #e9ecef;\r\n        }\r\n\r\n        .popover-content {\r\n            color: #e9" +
+"ecef;\r\n        }\r\n\r\n        .popover.top > .arrow {\r\n            border-top-colo" +
+"r: #2d2d44;\r\n        }\r\n\r\n        .popover.top > .arrow::after {\r\n            bo" +
+"rder-top-color: #1a1a2e;\r\n        }\r\n\r\n        .popover.bottom > .arrow {\r\n     " +
+"       border-bottom-color: #2d2d44;\r\n        }\r\n\r\n        .popover.bottom > .ar" +
+"row::after {\r\n            border-bottom-color: #1a1a2e;\r\n        }\r\n\r\n        .p" +
+"opover.left > .arrow {\r\n            border-left-color: #2d2d44;\r\n        }\r\n\r\n  " +
+"      .popover.left > .arrow::after {\r\n            border-left-color: #1a1a2e;\r\n" +
+"        }\r\n\r\n        .popover.right > .arrow {\r\n            border-right-color: " +
+"#2d2d44;\r\n        }\r\n\r\n        .popover.right > .arrow::after {\r\n            bor" +
+"der-right-color: #1a1a2e;\r\n        }\r\n\r\n        .cron-popover-jobs {\r\n          " +
+"  border-top-color: #2d2d44;\r\n        }\r\n    }\r\n</style>\r\n\r\n<div class=\"cron-sch" +
+"edule-container\">\r\n    <!-- Header -->\r\n    <div class=\"cron-schedule-header\">\r\n" +
+"        <h2>");
 
 
-            
-            #line 662 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 676 "..\..\Pages\CronHeatmap.cshtml"
        Write(Title);
 
-            
+
             #line default
             #line hidden
 WriteLiteral(" <span class=\"cron-version-badge\">");
 
 
-            
-            #line 662 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 676 "..\..\Pages\CronHeatmap.cshtml"
                                                Write(versionString);
 
-            
+
             #line default
             #line hidden
-WriteLiteral("</span></h2>\r\n        <div class=\"cron-schedule-controls\">\r\n            <button c" +
-"lass=\"btn btn-sm btn-default\" id=\"cron-refresh-btn\">\r\n                <span clas" +
-"s=\"glyphicon glyphicon-refresh\"></span> Refresh\r\n            </button>\r\n        " +
-"</div>\r\n    </div>\r\n\r\n    <!-- Timezone Info -->\r\n    <div class=\"cron-timezone-" +
-"info\" id=\"cron-timezone-info\"></div>\r\n\r\n    <!-- View Toggle -->\r\n    <div class" +
-"=\"cron-view-toggle\">\r\n        <button class=\"btn btn-sm btn-primary\" id=\"cron-bt" +
-"n-timeline\">Timeline View</button>\r\n        <button class=\"btn btn-sm btn-defaul" +
-"t\" id=\"cron-btn-heatmap\">Heatmap View</button>\r\n    </div>\r\n\r\n\r\n    <!-- States " +
-"-->\r\n    <div class=\"cron-state cron-loading visible\" id=\"cron-loading\">\r\n      " +
-"  <span class=\"glyphicon glyphicon-refresh glyphicon-spin\"></span> Loading sched" +
-"ule...\r\n    </div>\r\n    <div class=\"cron-state cron-error\" id=\"cron-error\"></div" +
-">\r\n    <div class=\"cron-state cron-no-jobs\" id=\"cron-no-jobs\">No recurring jobs " +
-"found.</div>\r\n\r\n    <!-- Timeline View -->\r\n    <div class=\"cron-view-panel\" id=" +
-"\"cron-view-timeline\">\r\n\r\n        <!-- Legend -->\r\n        <div class=\"cron-legen" +
-"d\">\r\n            <div class=\"cron-legend-item\">\r\n                <div class=\"cro" +
-"n-legend-marker past\"></div>\r\n                <span>Past Execution</span>\r\n     " +
-"       </div>\r\n            <div class=\"cron-legend-item\">\r\n                <div " +
-"class=\"cron-legend-marker upcoming\"></div>\r\n                <span>Upcoming Execu" +
-"tion</span>\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\"cron-time" +
-"line\" id=\"cron-timeline\">\r\n            <div class=\"cron-timeline-header\">\r\n     " +
-"           <div class=\"cron-timeline-job-header\">Job</div>\r\n");
-
-
-            
-            #line 705 "..\..\Pages\CronHeatmap.cshtml"
-                 for (int h = 0; h < 24; h++)
-                {
-
-            
-            #line default
-            #line hidden
-WriteLiteral("                    <div class=\"cron-hour-label\">");
-
-
-            
-            #line 707 "..\..\Pages\CronHeatmap.cshtml"
-                                            Write(h.ToString("00"));
-
-            
-            #line default
-            #line hidden
-WriteLiteral(":00</div>\r\n");
-
-
-            
-            #line 708 "..\..\Pages\CronHeatmap.cshtml"
-                }
-
-            
-            #line default
-            #line hidden
-WriteLiteral(@"            </div>
-            <div id=""cron-timeline-body""></div>
-            <div class=""cron-current-time"" id=""cron-current-time""></div>
+WriteLiteral(@"</span></h2>
+        <div class=""cron-schedule-controls"">
+            <button class=""btn btn-sm btn-default"" id=""cron-refresh-btn"">
+                <span class=""glyphicon glyphicon-refresh""></span> Refresh
+            </button>
         </div>
     </div>
 
-    <!-- Heatmap View -->
-    <div class=""cron-view-panel"" id=""cron-view-heatmap"">
+    <!-- Timezone Info -->
+    <div class=""cron-timezone-info"" id=""cron-timezone-info""></div>
+
+    <!-- States -->
+    <div class=""cron-state cron-loading visible"" id=""cron-loading"">
+        <span class=""glyphicon glyphicon-refresh glyphicon-spin""></span> Loading schedule...
+    </div>
+    <div class=""cron-state cron-error"" id=""cron-error""></div>
+    <div class=""cron-state cron-no-jobs"" id=""cron-no-jobs"">No recurring jobs found.</div>
+
+    <div id=""cron-schedule-content"" style=""display: none;"">
         <h4>Execution Density by Day (This Week)</h4>
         <div class=""cron-daily-heatmap"" id=""cron-daily-heatmap"">
 ");
 
 
-            
-            #line 719 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 697 "..\..\Pages\CronHeatmap.cshtml"
              for (int d = 0; d < 7; d++)
             {
 
-            
+
             #line default
             #line hidden
 WriteLiteral("                <div class=\"cron-daily-heatmap-cell\" data-day=\"");
 
 
-            
-            #line 721 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 699 "..\..\Pages\CronHeatmap.cshtml"
                                                           Write(d);
 
-            
+
             #line default
             #line hidden
-WriteLiteral("\"></div>\r\n");
+WriteLiteral("\"></div>\n");
 
 
-            
-            #line 722 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 700 "..\..\Pages\CronHeatmap.cshtml"
             }
 
-            
+
             #line default
             #line hidden
 WriteLiteral(@"        </div>
@@ -375,314 +340,424 @@ WriteLiteral(@"        </div>
             <span>Sat</span>
         </div>
 
-        <h4 style=""margin-top: 30px;"">Execution Density by Hour (Today)</h4>
+        <h4 style=""margin-top: 30px;"" id=""cron-hour-heading"">Execution Density by Hour</h4>
         <div class=""cron-heatmap"" id=""cron-heatmap"">
 ");
 
 
-            
-            #line 736 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 714 "..\..\Pages\CronHeatmap.cshtml"
              for (int h = 0; h < 24; h++)
             {
 
-            
+
             #line default
             #line hidden
 WriteLiteral("                <div class=\"cron-heatmap-cell\" data-hour=\"");
 
 
-            
-            #line 738 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 716 "..\..\Pages\CronHeatmap.cshtml"
                                                      Write(h);
 
-            
+
             #line default
             #line hidden
-WriteLiteral("\"></div>\r\n");
+WriteLiteral("\"></div>\n");
 
 
-            
-            #line 739 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 717 "..\..\Pages\CronHeatmap.cshtml"
             }
 
-            
+
             #line default
             #line hidden
-WriteLiteral("        </div>\r\n        <div class=\"cron-heatmap-labels\">\r\n");
+WriteLiteral("        </div>\n        <div class=\"cron-heatmap-labels\">\n");
 
 
-            
-            #line 742 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 720 "..\..\Pages\CronHeatmap.cshtml"
              for (int h = 0; h < 24; h += 3)
             {
 
-            
+
             #line default
             #line hidden
 WriteLiteral("                <span>");
 
 
-            
-            #line 744 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 722 "..\..\Pages\CronHeatmap.cshtml"
                  Write(h.ToString("00"));
 
-            
+
             #line default
             #line hidden
-WriteLiteral(":00</span>\r\n");
+WriteLiteral(":00</span>\n");
 
 
-            
-            #line 745 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 723 "..\..\Pages\CronHeatmap.cshtml"
             }
 
-            
+
             #line default
             #line hidden
-WriteLiteral(@"        </div>
-
-        <h4 style=""margin-top: 30px;"">Recurring Jobs</h4>
-        <table class=""table table-striped cron-jobs-table"">
-            <thead>
-                <tr>
-                    <th>Job ID</th>
-                    <th>Cron Expression</th>
-                    <th>Queue</th>
-                    <th>Executions Today</th>
-                    <th>Next Execution</th>
-                </tr>
-            </thead>
-            <tbody id=""cron-jobs-table-body""></tbody>
-        </table>
-    </div>
-
-    <!-- Tooltip -->
-    <div class=""cron-tooltip"" id=""cron-tooltip""></div>
-</div>
-
-<script>
-    (function() {
-        var apiUrl = '");
+WriteLiteral("        </div>\n\n        <div class=\"cron-minute-section\" id=\"cron-minute-section\"" +
+">\n            <h4 style=\"margin-top: 30px;\" id=\"cron-minute-heading\">Execution D" +
+"ensity by Minute</h4>\n            <div class=\"cron-minute-heatmap\" id=\"cron-minu" +
+"te-heatmap\">\n");
 
 
-            
-            #line 769 "..\..\Pages\CronHeatmap.cshtml"
+
+            #line 729 "..\..\Pages\CronHeatmap.cshtml"
+                 for (int m = 0; m < 60; m++)
+                {
+
+
+            #line default
+            #line hidden
+WriteLiteral("                    <div class=\"cron-heatmap-cell\" data-minute=\"");
+
+
+
+            #line 731 "..\..\Pages\CronHeatmap.cshtml"
+                                                           Write(m);
+
+
+            #line default
+            #line hidden
+WriteLiteral("\"></div>\n");
+
+
+
+            #line 732 "..\..\Pages\CronHeatmap.cshtml"
+                }
+
+
+            #line default
+            #line hidden
+WriteLiteral("            </div>\n            <div class=\"cron-heatmap-labels\">\n");
+
+
+
+            #line 735 "..\..\Pages\CronHeatmap.cshtml"
+                 for (int m = 0; m < 60; m += 5)
+                {
+
+
+            #line default
+            #line hidden
+WriteLiteral("                    <span>");
+
+
+
+            #line 737 "..\..\Pages\CronHeatmap.cshtml"
+                     Write(m.ToString("00"));
+
+
+            #line default
+            #line hidden
+WriteLiteral("</span>\n");
+
+
+
+            #line 738 "..\..\Pages\CronHeatmap.cshtml"
+                }
+
+
+            #line default
+            #line hidden
+WriteLiteral("            </div>\n        </div>\n\n        <!-- Legend -->\n        <div class=\"cr" +
+"on-legend\" style=\"margin-top: 30px;\">\n            <div class=\"cron-legend-item\">" +
+"\n                <div class=\"cron-legend-marker past\"></div>\n                <sp" +
+"an>Past Execution</span>\n            </div>\n            <div class=\"cron-legend-" +
+"item\">\n                <div class=\"cron-legend-marker upcoming\"></div>\n         " +
+"       <span>Upcoming Execution</span>\n            </div>\n        </div>\n\n      " +
+"  <h4 id=\"cron-timeline-heading\">Timeline</h4>\n        <div class=\"cron-timeline" +
+"\" id=\"cron-timeline\">\n            <div class=\"cron-timeline-header\" id=\"cron-tim" +
+"eline-header\">\n                <div class=\"cron-timeline-job-header\">Job</div>\n " +
+"               <div id=\"cron-timeline-labels\" style=\"display: flex; flex: 1;\"></" +
+"div>\n            </div>\n            <div id=\"cron-timeline-body\"></div>\n        " +
+"    <div class=\"cron-current-time\" id=\"cron-current-time\"></div>\n        </div>\n" +
+"\n        <h4 style=\"margin-top: 30px;\">Recurring Jobs</h4>\n        <table class=" +
+"\"table table-striped cron-jobs-table\">\n            <thead>\n                <tr>\n" +
+"                    <th>Job ID</th>\n                    <th>Cron Expression</th>" +
+"\n                    <th>Queue</th>\n                    <th id=\"cron-executions-" +
+"column-heading\">Executions Selected Day</th>\n                    <th>Next Execut" +
+"ion</th>\n                </tr>\n            </thead>\n            <tbody id=\"cron-" +
+"jobs-table-body\"></tbody>\n        </table>\n    </div>\n    <!-- Tooltip -->\n    <" +
+"div class=\"cron-tooltip\" id=\"cron-tooltip\"></div>\r\n</div>\r\n\r\n<script>\n    (funct" +
+"ion() {\n        var apiUrl = \'");
+
+
+
+            #line 784 "..\..\Pages\CronHeatmap.cshtml"
                  Write(apiUrl);
 
-            
+
             #line default
             #line hidden
-WriteLiteral("\';\r\n        var jobsData = [];\r\n        var currentView = \'timeline\';\r\n\r\n        " +
-"// DOM references\r\n        var loading = document.getElementById(\'cron-loading\')" +
-";\r\n        var error = document.getElementById(\'cron-error\');\r\n        var noJob" +
-"s = document.getElementById(\'cron-no-jobs\');\r\n        var timelineView = documen" +
-"t.getElementById(\'cron-view-timeline\');\r\n        var heatmapView = document.getE" +
-"lementById(\'cron-view-heatmap\');\r\n        var timelineBody = document.getElement" +
-"ById(\'cron-timeline-body\');\r\n        var heatmapCells = null;\r\n        var daily" +
-"HeatmapCells = null;\r\n        var tableBody = document.getElementById(\'cron-jobs" +
-"-table-body\');\r\n        var currentTimeEl = document.getElementById(\'cron-curren" +
-"t-time\');\r\n        var tooltip = document.getElementById(\'cron-tooltip\');\r\n     " +
-"   var btnTimeline = document.getElementById(\'cron-btn-timeline\');\r\n        var " +
-"btnHeatmap = document.getElementById(\'cron-btn-heatmap\');\r\n        var refreshBt" +
-"n = document.getElementById(\'cron-refresh-btn\');\r\n        var timezoneInfo = doc" +
-"ument.getElementById(\'cron-timezone-info\');\r\n\r\n        function init() {\r\n      " +
-"      heatmapCells = document.querySelectorAll(\'.cron-heatmap-cell\');\r\n         " +
-"   dailyHeatmapCells = document.querySelectorAll(\'.cron-daily-heatmap-cell\');\r\n " +
-"           displayTimezoneInfo();\r\n            loadData();\r\n            setInter" +
-"val(updateCurrentTime, 60000);\r\n\r\n            btnTimeline.addEventListener(\'clic" +
-"k\', function() { switchView(\'timeline\'); });\r\n            btnHeatmap.addEventLis" +
-"tener(\'click\', function() { switchView(\'heatmap\'); });\r\n            refreshBtn.a" +
-"ddEventListener(\'click\', function() { showLoading(); loadData(); });\r\n        }\r" +
-"\n\r\n        function displayTimezoneInfo() {\r\n            var tz = Intl.DateTimeF" +
-"ormat().resolvedOptions().timeZone;\r\n            var offset = new Date().getTime" +
-"zoneOffset();\r\n            var offsetHours = Math.abs(Math.floor(offset / 60));\r" +
-"\n            var offsetMins = Math.abs(offset % 60);\r\n            var offsetSign" +
-" = offset <= 0 ? \'+\' : \'-\';\r\n            var offsetStr = \'UTC\' + offsetSign + pa" +
-"d(offsetHours) + \':\' + pad(offsetMins);\r\n            timezoneInfo.textContent = " +
-"\'Displaying times in your local timezone: \' + tz + \' (\' + offsetStr + \')\';\r\n    " +
-"    }\r\n\r\n        function loadData() {\r\n            var xhr = new XMLHttpRequest" +
-"();\r\n            var tzOffset = new Date().getTimezoneOffset();\r\n            xhr" +
-".open(\'GET\', apiUrl + \'?tzOffset=\' + tzOffset, true);\r\n            xhr.onreadyst" +
-"atechange = function() {\r\n                if (xhr.readyState === 4) {\r\n         " +
-"           if (xhr.status === 200) {\r\n                        try {\r\n           " +
-"                 var data = JSON.parse(xhr.responseText);\r\n                     " +
-"       jobsData = data.jobs || [];\r\n                            render();\r\n     " +
-"                   } catch (e) {\r\n                            showError(\'Failed " +
-"to parse response: \' + e.message);\r\n                        }\r\n                 " +
-"   } else {\r\n                        showError(\'Failed to load data: \' + xhr.sta" +
-"tusText);\r\n                    }\r\n                }\r\n            };\r\n           " +
-" xhr.send();\r\n        }\r\n\r\n        function render() {\r\n            hideStates()" +
-";\r\n\r\n            if (jobsData.length === 0) {\r\n                noJobs.classList." +
-"add(\'visible\');\r\n                return;\r\n            }\r\n\r\n            renderTim" +
-"eline();\r\n            renderHeatmap();\r\n            renderDailyHeatmap();\r\n     " +
-"       showView();\r\n            updateCurrentTime();\r\n            initPopovers()" +
-";\r\n        }\r\n\r\n        function renderTimeline() {\r\n            var html = \'\';\r" +
-"\n            var now = new Date();\r\n\r\n            for (var i = 0; i < jobsData.l" +
-"ength; i++) {\r\n                var job = jobsData[i];\r\n                html += \'" +
-"<div class=\"cron-job-row\">\';\r\n                html += \'<div class=\"cron-job-name" +
-"\" title=\"\' + esc(job.id) + \'\">\' + esc(job.id);\r\n                html += \'<span c" +
-"lass=\"cron-queue-badge\">\' + esc(job.queue) + \'</span></div>\';\r\n                h" +
-"tml += \'<div class=\"cron-job-timeline\">\';\r\n\r\n                for (var h = 0; h <" +
-" 24; h++) {\r\n                    html += \'<div class=\"cron-hour-cell\"></div>\';\r\n" +
-"                }\r\n\r\n                for (var j = 0; j < job.executions.length; " +
-"j++) {\r\n                    var execTime = new Date(job.executions[j]);\r\n\r\n     " +
-"               var hourOfDay = execTime.getHours() + (execTime.getMinutes() / 60" +
-");\r\n                    var leftPercent = (hourOfDay / 24) * 100;\r\n\r\n           " +
-"         var isPast = execTime.getTime() < now.getTime();\r\n                    v" +
-"ar cls = isPast ? \'past\' : \'upcoming\';\r\n\r\n                    html += \'<div clas" +
-"s=\"cron-execution-marker \' + cls + \'\" style=\"left:\' + leftPercent + \'%;\" \';\r\n   " +
-"                 html += \'data-job=\"\' + esc(job.id) + \'\" data-time=\"\' + execTime" +
-".toISOString() + \'\" \';\r\n                    html += \'data-cron=\"\' + esc(job.cron" +
-") + \'\"></div>\';\r\n                }\r\n\r\n                html += \'</div></div>\';\r\n " +
-"           }\r\n\r\n            timelineBody.innerHTML = html;\r\n\r\n            var ma" +
-"rkers = timelineBody.querySelectorAll(\'.cron-execution-marker\');\r\n            fo" +
-"r (var k = 0; k < markers.length; k++) {\r\n                markers[k].addEventLis" +
-"tener(\'mouseenter\', showTooltip);\r\n                markers[k].addEventListener(\'" +
-"mouseleave\', hideTooltip);\r\n            }\r\n        }\r\n\r\n        function renderH" +
-"eatmap() {\r\n            var hourCounts = [];\r\n            var hourJobs = [];\r\n  " +
-"          for (var i = 0; i < 24; i++) {\r\n                hourCounts[i] = 0;\r\n  " +
-"              hourJobs[i] = [];\r\n            }\r\n\r\n            for (var i = 0; i " +
-"< jobsData.length; i++) {\r\n                for (var j = 0; j < jobsData[i].execu" +
-"tions.length; j++) {\r\n                    var execTime = new Date(jobsData[i].ex" +
-"ecutions[j]);\r\n                    var h = execTime.getHours();\r\n               " +
-"     hourCounts[h]++;\r\n                    if (hourJobs[h].indexOf(jobsData[i].i" +
-"d) === -1) {\r\n                        hourJobs[h].push(jobsData[i].id);\r\n       " +
-"             }\r\n                }\r\n            }\r\n\r\n            var max = Math.m" +
-"ax.apply(null, hourCounts) || 1;\r\n            var currentHour = new Date().getHo" +
-"urs();\r\n\r\n            for (var i = 0; i < heatmapCells.length; i++) {\r\n         " +
-"       var cell = heatmapCells[i];\r\n                var hour = parseInt(cell.get" +
-"Attribute(\'data-hour\'), 10);\r\n                var count = hourCounts[hour];\r\n   " +
-"             var jobs = hourJobs[hour];\r\n                var intensity = count /" +
-" max;\r\n\r\n                if (count > 0) {\r\n                    cell.style.backgr" +
-"oundColor = getHeatmapColor(intensity);\r\n                    cell.textContent = " +
-"count;\r\n                } else {\r\n                    cell.style.backgroundColor" +
-" = \'\';\r\n                    cell.textContent = \'\';\r\n                }\r\n\r\n       " +
-"         // Highlight current hour\r\n                if (hour === currentHour) {\r" +
-"\n                    cell.classList.add(\'current-hour\');\r\n                } else" +
-" {\r\n                    cell.classList.remove(\'current-hour\');\r\n                " +
-"}\r\n\r\n                // Build popover content\r\n                var popoverTitle " +
-"= pad(hour) + \':00 - \' + pad(hour) + \':59\';\r\n                var popoverContent " +
-"= \'<div class=\"cron-popover-title\">\' + count + \' execution(s)</div>\';\r\n         " +
-"       if (jobs.length > 0) {\r\n                    popoverContent += \'<div class" +
-"=\"cron-popover-jobs\"><strong>Jobs:</strong>\';\r\n                    var displayJo" +
-"bs = jobs.slice(0, 10);\r\n                    for (var j = 0; j < displayJobs.len" +
-"gth; j++) {\r\n                        popoverContent += \'<div class=\"cron-popover" +
-"-job-item\">• \' + esc(displayJobs[j]) + \'</div>\';\r\n                    }\r\n       " +
-"             if (jobs.length > 10) {\r\n                        popoverContent += " +
-"\'<div class=\"cron-popover-job-item\"><em>...and \' + (jobs.length - 10) + \' more</" +
-"em></div>\';\r\n                    }\r\n                    popoverContent += \'</div" +
-">\';\r\n                }\r\n                \r\n                cell.setAttribute(\'dat" +
-"a-toggle\', \'popover\');\r\n                cell.setAttribute(\'data-trigger\', \'hover" +
-"\');\r\n                cell.setAttribute(\'data-placement\', \'top\');\r\n              " +
-"  cell.setAttribute(\'data-html\', \'true\');\r\n                cell.setAttribute(\'da" +
-"ta-title\', popoverTitle);\r\n                cell.setAttribute(\'data-content\', pop" +
-"overContent);\r\n            }\r\n\r\n            var tableHtml = \'\';\r\n            for" +
-" (var i = 0; i < jobsData.length; i++) {\r\n                var job = jobsData[i];" +
-"\r\n                tableHtml += \'<tr>\';\r\n                tableHtml += \'<td>\' + es" +
-"c(job.id) + \'</td>\';\r\n                tableHtml += \'<td><code>\' + esc(job.cron) " +
-"+ \'</code></td>\';\r\n                tableHtml += \'<td><span class=\"label label-de" +
-"fault\">\' + esc(job.queue) + \'</span></td>\';\r\n                tableHtml += \'<td>\'" +
-" + job.executions.length + \'</td>\';\r\n                tableHtml += \'<td>\' + (job." +
-"nextExecution ? formatDateTime(new Date(job.nextExecution)) : \'N/A\') + \'</td>\';\r" +
-"\n                tableHtml += \'</tr>\';\r\n            }\r\n            tableBody.inn" +
-"erHTML = tableHtml;\r\n        }\r\n\r\n        function renderDailyHeatmap() {\r\n     " +
-"       var dayCounts = [];\r\n            var dayJobs = [];\r\n            for (var " +
-"i = 0; i < 7; i++) {\r\n                dayCounts[i] = 0;\r\n                dayJobs" +
-"[i] = [];\r\n            }\r\n\r\n            var today = new Date().getDay();\r\n\r\n    " +
-"        for (var i = 0; i < jobsData.length; i++) {\r\n                var weeklyE" +
-"xecs = jobsData[i].weeklyExecutions || [];\r\n                for (var j = 0; j < " +
-"weeklyExecs.length; j++) {\r\n                    var execTime = new Date(weeklyEx" +
-"ecs[j]);\r\n                    var dayOfWeek = execTime.getDay();\r\n              " +
-"      dayCounts[dayOfWeek]++;\r\n                    if (dayJobs[dayOfWeek].indexO" +
-"f(jobsData[i].id) === -1) {\r\n                        dayJobs[dayOfWeek].push(job" +
-"sData[i].id);\r\n                    }\r\n                }\r\n            }\r\n\r\n      " +
-"      var max = Math.max.apply(null, dayCounts) || 1;\r\n            var dayNames " +
-"= [\'Sunday\', \'Monday\', \'Tuesday\', \'Wednesday\', \'Thursday\', \'Friday\', \'Saturday\']" +
-";\r\n\r\n            for (var i = 0; i < dailyHeatmapCells.length; i++) {\r\n         " +
-"       var cell = dailyHeatmapCells[i];\r\n                var day = parseInt(cell" +
-".getAttribute(\'data-day\'), 10);\r\n                var count = dayCounts[day];\r\n  " +
-"              var jobs = dayJobs[day];\r\n                var intensity = count / " +
-"max;\r\n\r\n                if (count > 0) {\r\n                    cell.style.backgro" +
-"undColor = getHeatmapColor(intensity);\r\n                    cell.textContent = c" +
-"ount;\r\n                } else {\r\n                    cell.style.backgroundColor " +
-"= \'\';\r\n                    cell.textContent = \'\';\r\n                }\r\n\r\n        " +
-"        if (day === today) {\r\n                    cell.classList.add(\'today\');\r\n" +
-"                } else {\r\n                    cell.classList.remove(\'today\');\r\n " +
-"               }\r\n\r\n                // Build popover content\r\n                va" +
-"r popoverTitle = dayNames[day];\r\n                var popoverContent = \'<div clas" +
-"s=\"cron-popover-title\">\' + count + \' execution(s)</div>\';\r\n                if (j" +
-"obs.length > 0) {\r\n                    popoverContent += \'<div class=\"cron-popov" +
-"er-jobs\"><strong>Jobs:</strong>\';\r\n                    var displayJobs = jobs.sl" +
-"ice(0, 10);\r\n                    for (var j = 0; j < displayJobs.length; j++) {\r" +
-"\n                        popoverContent += \'<div class=\"cron-popover-job-item\">•" +
-" \' + esc(displayJobs[j]) + \'</div>\';\r\n                    }\r\n                   " +
-" if (jobs.length > 10) {\r\n                        popoverContent += \'<div class=" +
-"\"cron-popover-job-item\"><em>...and \' + (jobs.length - 10) + \' more</em></div>\';\r" +
-"\n                    }\r\n                    popoverContent += \'</div>\';\r\n       " +
-"         }\r\n\r\n                cell.setAttribute(\'data-toggle\', \'popover\');\r\n    " +
-"            cell.setAttribute(\'data-trigger\', \'hover\');\r\n                cell.se" +
-"tAttribute(\'data-placement\', \'bottom\');\r\n                cell.setAttribute(\'data" +
-"-html\', \'true\');\r\n                cell.setAttribute(\'data-title\', popoverTitle);" +
-"\r\n                cell.setAttribute(\'data-content\', popoverContent);\r\n          " +
-"  }\r\n        }\r\n\r\n        function initPopovers() {\r\n            // Destroy exis" +
-"ting popovers first\r\n            destroyPopovers();\r\n            \r\n            /" +
-"/ Initialize Bootstrap popovers if jQuery and Bootstrap are available\r\n         " +
-"   if (typeof $ !== \'undefined\' && $.fn.popover) {\r\n                $(\'.cron-sch" +
-"edule-container [data-toggle=\"popover\"]\').popover({\r\n                    contain" +
-"er: \'body\',\r\n                    trigger: \'hover\'\r\n                });\r\n        " +
-"    }\r\n        }\r\n\r\n        function destroyPopovers() {\r\n            if (typeof" +
-" $ !== \'undefined\' && $.fn.popover) {\r\n                $(\'.cron-schedule-contain" +
-"er [data-toggle=\"popover\"]\').popover(\'destroy\');\r\n            }\r\n        }\r\n\r\n  " +
-"      function getHeatmapColor(intensity) {\r\n            var r, g, b;\r\n\r\n       " +
-"     if (intensity <= 0.25) {\r\n                r = Math.round(76 + (180 * (inten" +
-"sity / 0.25)));\r\n                g = 175;\r\n                b = 80;\r\n            " +
-"} else if (intensity <= 0.5) {\r\n                var t = (intensity - 0.25) / 0.2" +
-"5;\r\n                r = Math.round(180 + (75 * t));\r\n                g = Math.ro" +
-"und(175 + (30 * t));\r\n                b = Math.round(80 - (40 * t));\r\n          " +
-"  } else if (intensity <= 0.75) {\r\n                var t = (intensity - 0.5) / 0" +
-".25;\r\n                r = 255;\r\n                g = Math.round(205 - (100 * t));" +
-"\r\n                b = Math.round(40 - (20 * t));\r\n            } else {\r\n        " +
-"        var t = (intensity - 0.75) / 0.25;\r\n                r = 255;\r\n          " +
-"      g = Math.round(105 - (75 * t));\r\n                b = Math.round(20 + (30 *" +
-" t));\r\n            }\r\n\r\n            return \'rgb(\' + r + \',\' + g + \',\' + b + \')\';" +
-"\r\n        }\r\n\r\n        function updateCurrentTime() {\r\n            var timeline " +
-"= document.getElementById(\'cron-timeline\');\r\n            if (!timeline || jobsDa" +
-"ta.length === 0) return;\r\n\r\n            var now = new Date();\r\n            var n" +
-"owHour = now.getHours() + (now.getMinutes() / 60);\r\n            var width = time" +
-"line.offsetWidth - 200;\r\n            currentTimeEl.style.left = (200 + (nowHour " +
-"/ 24) * width) + \'px\';\r\n        }\r\n\r\n        function showTooltip(e) {\r\n        " +
-"    var el = e.target;\r\n            var execTime = new Date(el.getAttribute(\'dat" +
-"a-time\'));\r\n            tooltip.innerHTML = \'<strong>\' + esc(el.getAttribute(\'da" +
-"ta-job\')) + \'</strong><br>\' +\r\n                \'Time: \' + formatDateTime(execTim" +
-"e) + \'<br>\' +\r\n                \'Cron: \' + esc(el.getAttribute(\'data-cron\'));\r\n\r\n" +
-"            var rect = el.getBoundingClientRect();\r\n            tooltip.classLis" +
-"t.add(\'visible\');\r\n            tooltip.style.left = (rect.left + rect.width / 2 " +
-"- tooltip.offsetWidth / 2) + \'px\';\r\n            tooltip.style.top = (rect.top - " +
-"tooltip.offsetHeight - 10) + \'px\';\r\n        }\r\n\r\n        function hideTooltip() " +
-"{\r\n            tooltip.classList.remove(\'visible\');\r\n        }\r\n\r\n        functi" +
-"on switchView(view) {\r\n            currentView = view;\r\n            btnTimeline." +
-"className = \'btn btn-sm \' + (view === \'timeline\' ? \'btn-primary\' : \'btn-default\'" +
-");\r\n            btnHeatmap.className = \'btn btn-sm \' + (view === \'heatmap\' ? \'bt" +
-"n-primary\' : \'btn-default\');\r\n            showView();\r\n        }\r\n\r\n        func" +
-"tion showView() {\r\n            timelineView.className = \'cron-view-panel\' + (cur" +
-"rentView === \'timeline\' ? \' active\' : \'\');\r\n            heatmapView.className = " +
-"\'cron-view-panel\' + (currentView === \'heatmap\' ? \' active\' : \'\');\r\n        }\r\n\r\n" +
-"        function showLoading() {\r\n            hideStates();\r\n            loading" +
-".classList.add(\'visible\');\r\n        }\r\n\r\n        function showError(msg) {\r\n    " +
-"        hideStates();\r\n            error.textContent = msg;\r\n            error.c" +
-"lassList.add(\'visible\');\r\n        }\r\n\r\n        function hideStates() {\r\n        " +
-"    loading.classList.remove(\'visible\');\r\n            error.classList.remove(\'vi" +
-"sible\');\r\n            noJobs.classList.remove(\'visible\');\r\n        }\r\n\r\n        " +
-"function esc(text) {\r\n            if (!text) return \'\';\r\n            var div = d" +
-"ocument.createElement(\'div\');\r\n            div.textContent = text;\r\n            " +
-"return div.innerHTML;\r\n        }\r\n\r\n        function pad(n) {\r\n            retur" +
-"n n < 10 ? \'0\' + n : n;\r\n        }\r\n\r\n        function formatTime(d) {\r\n        " +
-"    return pad(d.getHours()) + \':\' + pad(d.getMinutes()) + \':\' + pad(d.getSecond" +
-"s());\r\n        }\r\n\r\n        function formatDateTime(d) {\r\n            return pad" +
-"(d.getDate()) + \'/\' + pad(d.getMonth() + 1) + \'/\' + d.getFullYear() + \' \' + form" +
-"atTime(d);\r\n        }\r\n\r\n        if (document.readyState === \'loading\') {\r\n     " +
-"       document.addEventListener(\'DOMContentLoaded\', init);\r\n        } else {\r\n " +
-"           init();\r\n        }\r\n    })();\r\n</script>\r\n");
+WriteLiteral("\';\n        var jobsData = [];\n        var dayNames = [\'Sunday\', \'Monday\', \'Tuesda" +
+"y\', \'Wednesday\', \'Thursday\', \'Friday\', \'Saturday\'];\n        var selectedDay = ne" +
+"w Date().getDay();\n        var selectedHour = null;\n\n        // DOM references\n " +
+"       var loading = document.getElementById(\'cron-loading\');\n        var error " +
+"= document.getElementById(\'cron-error\');\n        var noJobs = document.getElemen" +
+"tById(\'cron-no-jobs\');\n        var content = document.getElementById(\'cron-sched" +
+"ule-content\');\n        var timelineBody = document.getElementById(\'cron-timeline" +
+"-body\');\n        var timelineLabels = document.getElementById(\'cron-timeline-lab" +
+"els\');\n        var heatmapCells = null;\n        var minuteHeatmapCells = null;\n " +
+"       var dailyHeatmapCells = null;\n        var tableBody = document.getElement" +
+"ById(\'cron-jobs-table-body\');\n        var currentTimeEl = document.getElementByI" +
+"d(\'cron-current-time\');\n        var tooltip = document.getElementById(\'cron-tool" +
+"tip\');\n        var refreshBtn = document.getElementById(\'cron-refresh-btn\');\n   " +
+"     var timezoneInfo = document.getElementById(\'cron-timezone-info\');\n        v" +
+"ar hourHeading = document.getElementById(\'cron-hour-heading\');\n        var minut" +
+"eHeading = document.getElementById(\'cron-minute-heading\');\n        var minuteSec" +
+"tion = document.getElementById(\'cron-minute-section\');\n        var timelineHeadi" +
+"ng = document.getElementById(\'cron-timeline-heading\');\n        var executionsCol" +
+"umnHeading = document.getElementById(\'cron-executions-column-heading\');\n\n       " +
+" function init() {\n            heatmapCells = document.querySelectorAll(\'#cron-h" +
+"eatmap .cron-heatmap-cell\');\n            minuteHeatmapCells = document.querySele" +
+"ctorAll(\'#cron-minute-heatmap .cron-heatmap-cell\');\n            dailyHeatmapCell" +
+"s = document.querySelectorAll(\'.cron-daily-heatmap-cell\');\n            displayTi" +
+"mezoneInfo();\n            loadData();\n            setInterval(updateCurrentTime," +
+" 60000);\n\n            refreshBtn.addEventListener(\'click\', function() { showLoad" +
+"ing(); loadData(); });\n\n            for (var i = 0; i < dailyHeatmapCells.length" +
+"; i++) {\n                dailyHeatmapCells[i].addEventListener(\'click\', function" +
+"(e) {\n                    selectedDay = parseInt(e.currentTarget.getAttribute(\'d" +
+"ata-day\'), 10);\n                    selectedHour = null;\n                    ren" +
+"der();\n                });\n            }\n\n            for (var j = 0; j < heatma" +
+"pCells.length; j++) {\n                heatmapCells[j].addEventListener(\'click\', " +
+"function(e) {\n                    selectedHour = parseInt(e.currentTarget.getAtt" +
+"ribute(\'data-hour\'), 10);\n                    render();\n                });\n    " +
+"        }\n        }\n\n        function displayTimezoneInfo() {\n            var tz" +
+" = Intl.DateTimeFormat().resolvedOptions().timeZone;\n            var offset = ne" +
+"w Date().getTimezoneOffset();\n            var offsetHours = Math.abs(Math.floor(" +
+"offset / 60));\n            var offsetMins = Math.abs(offset % 60);\n            v" +
+"ar offsetSign = offset <= 0 ? \'+\' : \'-\';\n            var offsetStr = \'UTC\' + off" +
+"setSign + pad(offsetHours) + \':\' + pad(offsetMins);\n            timezoneInfo.tex" +
+"tContent = \'Displaying times in your local timezone: \' + tz + \' (\' + offsetStr +" +
+" \')\';\n        }\n\n        function loadData() {\n            var xhr = new XMLHttp" +
+"Request();\n            var tzOffset = new Date().getTimezoneOffset();\n          " +
+"  xhr.open(\'GET\', apiUrl + \'?tzOffset=\' + tzOffset, true);\n            xhr.onrea" +
+"dystatechange = function() {\n                if (xhr.readyState === 4) {\n       " +
+"             if (xhr.status === 200) {\n                        try {\n           " +
+"                 var data = JSON.parse(xhr.responseText);\n                      " +
+"      jobsData = data.jobs || [];\n                            render();\n        " +
+"                } catch (e) {\n                            showError(\'Failed to p" +
+"arse response: \' + e.message);\n                        }\n                    } e" +
+"lse {\n                        showError(\'Failed to load data: \' + xhr.statusText" +
+");\n                    }\n                }\n            };\n            xhr.send()" +
+";\n        }\n\n        function render() {\n            hideStates();\n\n            " +
+"if (jobsData.length === 0) {\n                noJobs.classList.add(\'visible\');\n  " +
+"              content.style.display = \'none\';\n                return;\n          " +
+"  }\n\n            content.style.display = \'\';\n            renderDailyHeatmap();\n " +
+"           renderHeatmap();\n            renderMinuteHeatmap();\n            rende" +
+"rTimeline();\n            renderJobsTable();\n            updateCurrentTime();\n   " +
+"         initPopovers();\n        }\n\n        function renderTimeline() {\n        " +
+"    var html = \'\';\n            var now = new Date();\n            var isHourMode " +
+"= selectedHour !== null;\n            var cellCount = isHourMode ? 60 : 24;\n     " +
+"       var selectionLabel = dayNames[selectedDay] + (isHourMode ? \' \' + pad(sele" +
+"ctedHour) + \':00\' : \'\');\n            var rows = 0;\n\n            timelineHeading." +
+"textContent = \'Timeline - \' + selectionLabel;\n            renderTimelineLabels(i" +
+"sHourMode);\n\n            for (var i = 0; i < jobsData.length; i++) {\n           " +
+"     var job = jobsData[i];\n                var executions = isHourMode ? getSel" +
+"ectedHourOccurrences(job) : getSelectedDayOccurrences(job);\n                if (" +
+"executions.length === 0) continue;\n\n                rows++;\n                html" +
+" += \'<div class=\"cron-job-row\">\';\n                html += \'<div class=\"cron-job-" +
+"name\" title=\"\' + esc(job.id) + \'\">\' + esc(job.id);\n                html += \'<spa" +
+"n class=\"cron-queue-badge\">\' + esc(job.queue) + \'</span></div>\';\n               " +
+" html += \'<div class=\"cron-job-timeline\">\';\n\n                for (var h = 0; h <" +
+" cellCount; h++) {\n                    html += \'<div class=\"cron-hour-cell\"></di" +
+"v>\';\n                }\n\n                for (var j = 0; j < executions.length; j" +
+"++) {\n                    var execTime = executions[j];\n                    var " +
+"leftPercent = isHourMode\n                        ? ((execTime.getMinutes() + (ex" +
+"ecTime.getSeconds() / 60)) / 60) * 100\n                        : ((execTime.getH" +
+"ours() + (execTime.getMinutes() / 60)) / 24) * 100;\n\n                    var isP" +
+"ast = execTime.getTime() < now.getTime();\n                    var cls = isPast ?" +
+" \'past\' : \'upcoming\';\n\n                    html += \'<div class=\"cron-execution-m" +
+"arker \' + cls + \'\" style=\"left:\' + leftPercent + \'%;\" \';\n                    htm" +
+"l += \'data-job=\"\' + esc(job.id) + \'\" data-time=\"\' + execTime.toISOString() + \'\" " +
+"\';\n                    html += \'data-cron=\"\' + esc(job.cron) + \'\"></div>\';\n     " +
+"           }\n\n                html += \'</div></div>\';\n            }\n\n           " +
+" if (rows === 0) {\n                html = \'<div class=\"cron-state visible\">No ex" +
+"ecutions in this selection.</div>\';\n            }\n\n            timelineBody.inne" +
+"rHTML = html;\n\n            var markers = timelineBody.querySelectorAll(\'.cron-ex" +
+"ecution-marker\');\n            for (var k = 0; k < markers.length; k++) {\n       " +
+"         markers[k].addEventListener(\'mouseenter\', showTooltip);\n               " +
+" markers[k].addEventListener(\'mouseleave\', hideTooltip);\n            }\n        }" +
+"\n\n        function renderHeatmap() {\n            var hourCounts = [];\n          " +
+"  var hourJobs = [];\n            for (var i = 0; i < 24; i++) {\n                " +
+"hourCounts[i] = 0;\n                hourJobs[i] = [];\n            }\n\n            " +
+"for (var j = 0; j < jobsData.length; j++) {\n                var executions = get" +
+"SelectedDayOccurrences(jobsData[j]);\n                for (var k = 0; k < executi" +
+"ons.length; k++) {\n                    var execTime = executions[k];\n           " +
+"         var h = execTime.getHours();\n                    hourCounts[h]++;\n     " +
+"               if (hourJobs[h].indexOf(jobsData[j].id) === -1) {\n               " +
+"         hourJobs[h].push(jobsData[j].id);\n                    }\n               " +
+" }\n            }\n\n            var max = Math.max.apply(null, hourCounts) || 1;\n " +
+"           var currentHour = new Date().getHours();\n            var today = new " +
+"Date().getDay();\n            hourHeading.textContent = \'Execution Density by Hou" +
+"r - \' + dayNames[selectedDay];\n\n            for (var m = 0; m < heatmapCells.len" +
+"gth; m++) {\n                var cell = heatmapCells[m];\n                var hour" +
+" = parseInt(cell.getAttribute(\'data-hour\'), 10);\n                var count = hou" +
+"rCounts[hour];\n                var jobs = hourJobs[hour];\n                var in" +
+"tensity = count / max;\n\n                if (count > 0) {\n                    cel" +
+"l.style.backgroundColor = getHeatmapColor(intensity);\n                    cell.t" +
+"extContent = count;\n                } else {\n                    cell.style.back" +
+"groundColor = \'\';\n                    cell.textContent = \'\';\n                }\n\n" +
+"                if (selectedDay === today && hour === currentHour) {\n           " +
+"         cell.classList.add(\'current-hour\');\n                } else {\n          " +
+"          cell.classList.remove(\'current-hour\');\n                }\n\n            " +
+"    if (selectedHour === hour) {\n                    cell.classList.add(\'selecte" +
+"d\');\n                } else {\n                    cell.classList.remove(\'selecte" +
+"d\');\n                }\n\n                setPopover(cell, pad(hour) + \':00 - \' + " +
+"pad(hour) + \':59\', count, jobs, \'top\');\n            }\n        }\n\n        functio" +
+"n renderDailyHeatmap() {\n            var dayCounts = [];\n            var dayJobs" +
+" = [];\n            for (var i = 0; i < 7; i++) {\n                dayCounts[i] = " +
+"0;\n                dayJobs[i] = [];\n            }\n\n            var today = new D" +
+"ate().getDay();\n\n            for (var j = 0; j < jobsData.length; j++) {\n       " +
+"         var weeklyExecs = jobsData[j].weeklyExecutions || [];\n                f" +
+"or (var k = 0; k < weeklyExecs.length; k++) {\n                    var execTime =" +
+" new Date(weeklyExecs[k]);\n                    var dayOfWeek = execTime.getDay()" +
+";\n                    dayCounts[dayOfWeek]++;\n                    if (dayJobs[da" +
+"yOfWeek].indexOf(jobsData[j].id) === -1) {\n                        dayJobs[dayOf" +
+"Week].push(jobsData[j].id);\n                    }\n                }\n            " +
+"}\n\n            var max = Math.max.apply(null, dayCounts) || 1;\n\n            for " +
+"(var m = 0; m < dailyHeatmapCells.length; m++) {\n                var cell = dail" +
+"yHeatmapCells[m];\n                var day = parseInt(cell.getAttribute(\'data-day" +
+"\'), 10);\n                var count = dayCounts[day];\n                var jobs = " +
+"dayJobs[day];\n                var intensity = count / max;\n\n                if (" +
+"count > 0) {\n                    cell.style.backgroundColor = getHeatmapColor(in" +
+"tensity);\n                    cell.textContent = count;\n                } else {" +
+"\n                    cell.style.backgroundColor = \'\';\n                    cell.t" +
+"extContent = \'\';\n                }\n\n                if (day === today) {\n       " +
+"             cell.classList.add(\'today\');\n                } else {\n             " +
+"       cell.classList.remove(\'today\');\n                }\n\n                if (da" +
+"y === selectedDay) {\n                    cell.classList.add(\'selected\');\n       " +
+"         } else {\n                    cell.classList.remove(\'selected\');\n       " +
+"         }\n\n                setPopover(cell, dayNames[day], count, jobs, \'bottom" +
+"\');\n            }\n        }\n\n        function renderMinuteHeatmap() {\n          " +
+"  if (selectedHour === null) {\n                minuteSection.classList.remove(\'v" +
+"isible\');\n                return;\n            }\n\n            minuteSection.class" +
+"List.add(\'visible\');\n            minuteHeading.textContent = \'Execution Density " +
+"by Minute - \' + dayNames[selectedDay] + \' \' + pad(selectedHour) + \':00\';\n\n      " +
+"      var minuteCounts = [];\n            var minuteJobs = [];\n            for (v" +
+"ar i = 0; i < 60; i++) {\n                minuteCounts[i] = 0;\n                mi" +
+"nuteJobs[i] = [];\n            }\n\n            for (var j = 0; j < jobsData.length" +
+"; j++) {\n                var executions = getSelectedHourOccurrences(jobsData[j]" +
+");\n                for (var k = 0; k < executions.length; k++) {\n               " +
+"     var minute = executions[k].getMinutes();\n                    minuteCounts[m" +
+"inute]++;\n                    if (minuteJobs[minute].indexOf(jobsData[j].id) ===" +
+" -1) {\n                        minuteJobs[minute].push(jobsData[j].id);\n        " +
+"            }\n                }\n            }\n\n            var max = Math.max.ap" +
+"ply(null, minuteCounts) || 1;\n            for (var m = 0; m < minuteHeatmapCells" +
+".length; m++) {\n                var cell = minuteHeatmapCells[m];\n              " +
+"  var count = minuteCounts[m];\n                var jobs = minuteJobs[m];\n       " +
+"         var intensity = count / max;\n\n                if (count > 0) {\n        " +
+"            cell.style.backgroundColor = getHeatmapColor(intensity);\n           " +
+"         cell.textContent = count;\n                } else {\n                    " +
+"cell.style.backgroundColor = \'\';\n                    cell.textContent = \'\';\n    " +
+"            }\n\n                setPopover(cell, pad(selectedHour) + \':\' + pad(m)" +
+", count, jobs, \'top\');\n            }\n        }\n\n        function renderJobsTable" +
+"() {\n            var html = \'\';\n            executionsColumnHeading.textContent " +
+"= selectedHour === null ? \'Executions Selected Day\' : \'Executions Selected Hour\'" +
+";\n\n            for (var i = 0; i < jobsData.length; i++) {\n                var j" +
+"ob = jobsData[i];\n                var executions = selectedHour === null ? getSe" +
+"lectedDayOccurrences(job) : getSelectedHourOccurrences(job);\n                htm" +
+"l += \'<tr>\';\n                html += \'<td>\' + esc(job.id) + \'</td>\';\n           " +
+"     html += \'<td><code>\' + esc(job.cron) + \'</code></td>\';\n                html" +
+" += \'<td><span class=\"label label-default\">\' + esc(job.queue) + \'</span></td>\';\n" +
+"                html += \'<td>\' + executions.length + \'</td>\';\n                ht" +
+"ml += \'<td>\' + (job.nextExecution ? formatDateTime(new Date(job.nextExecution)) " +
+": \'N/A\') + \'</td>\';\n                html += \'</tr>\';\n            }\n\n            " +
+"tableBody.innerHTML = html;\n        }\n\n        function renderTimelineLabels(isH" +
+"ourMode) {\n            var html = \'\';\n            var count = isHourMode ? 60 : " +
+"24;\n            for (var i = 0; i < count; i++) {\n                var label = is" +
+"HourMode ? (i % 5 === 0 ? pad(i) : \'\') : pad(i) + \':00\';\n                html +=" +
+" \'<div class=\"cron-hour-label\">\' + label + \'</div>\';\n            }\n            t" +
+"imelineLabels.innerHTML = html;\n        }\n\n        function getSelectedDayOccurr" +
+"ences(job) {\n            var result = [];\n            var executions = job.weekl" +
+"yExecutions || [];\n            for (var i = 0; i < executions.length; i++) {\n   " +
+"             var execTime = new Date(executions[i]);\n                if (execTim" +
+"e.getDay() === selectedDay) {\n                    result.push(execTime);\n       " +
+"         }\n            }\n            return result;\n        }\n\n        function " +
+"getSelectedHourOccurrences(job) {\n            var result = [];\n            var e" +
+"xecutions = getSelectedDayOccurrences(job);\n            for (var i = 0; i < exec" +
+"utions.length; i++) {\n                if (executions[i].getHours() === selectedH" +
+"our) {\n                    result.push(executions[i]);\n                }\n       " +
+"     }\n            return result;\n        }\n\n        function setPopover(cell, t" +
+"itle, count, jobs, placement) {\n            var content = \'<div class=\"cron-popo" +
+"ver-title\">\' + count + \' execution(s)</div>\';\n            if (jobs.length > 0) {" +
+"\n                content += \'<div class=\"cron-popover-jobs\"><strong>Jobs:</stron" +
+"g>\';\n                var displayJobs = jobs.slice(0, 10);\n                for (v" +
+"ar i = 0; i < displayJobs.length; i++) {\n                    content += \'<div cl" +
+"ass=\"cron-popover-job-item\">- \' + esc(displayJobs[i]) + \'</div>\';\n              " +
+"  }\n                if (jobs.length > 10) {\n                    content += \'<div" +
+" class=\"cron-popover-job-item\"><em>...and \' + (jobs.length - 10) + \' more</em></" +
+"div>\';\n                }\n                content += \'</div>\';\n            }\n\n   " +
+"         cell.setAttribute(\'data-toggle\', \'popover\');\n            cell.setAttrib" +
+"ute(\'data-trigger\', \'hover\');\n            cell.setAttribute(\'data-placement\', pl" +
+"acement);\n            cell.setAttribute(\'data-html\', \'true\');\n            cell.s" +
+"etAttribute(\'data-title\', title);\n            cell.setAttribute(\'data-content\', " +
+"content);\n        }\n\n        function initPopovers() {\n            destroyPopove" +
+"rs();\n\n            if (typeof $ !== \'undefined\' && $.fn.popover) {\n             " +
+"   $(\'.cron-schedule-container [data-toggle=\"popover\"]\').popover({\n             " +
+"       container: \'body\',\n                    trigger: \'hover\'\n                }" +
+");\n            }\n        }\n\n        function destroyPopovers() {\n            if " +
+"(typeof $ !== \'undefined\' && $.fn.popover) {\n                $(\'.cron-schedule-c" +
+"ontainer [data-toggle=\"popover\"]\').popover(\'destroy\');\n            }\n        }\n\n" +
+"        function getHeatmapColor(intensity) {\n            var r, g, b;\n\n        " +
+"    if (intensity <= 0.25) {\n                r = Math.round(76 + (180 * (intensi" +
+"ty / 0.25)));\n                g = 175;\n                b = 80;\n            } els" +
+"e if (intensity <= 0.5) {\n                var t = (intensity - 0.25) / 0.25;\n   " +
+"             r = Math.round(180 + (75 * t));\n                g = Math.round(175 " +
+"+ (30 * t));\n                b = Math.round(80 - (40 * t));\n            } else i" +
+"f (intensity <= 0.75) {\n                var t = (intensity - 0.5) / 0.25;\n      " +
+"          r = 255;\n                g = Math.round(205 - (100 * t));\n            " +
+"    b = Math.round(40 - (20 * t));\n            } else {\n                var t = " +
+"(intensity - 0.75) / 0.25;\n                r = 255;\n                g = Math.rou" +
+"nd(105 - (75 * t));\n                b = Math.round(20 + (30 * t));\n            }" +
+"\n\n            return \'rgb(\' + r + \',\' + g + \',\' + b + \')\';\n        }\n\n        fu" +
+"nction updateCurrentTime() {\n            var timeline = document.getElementById(" +
+"\'cron-timeline\');\n            if (!timeline || jobsData.length === 0) return;\n\n " +
+"           var now = new Date();\n            var today = now.getDay();\n         " +
+"   var isHourMode = selectedHour !== null;\n            var shouldShow = selected" +
+"Day === today && (!isHourMode || selectedHour === now.getHours());\n            i" +
+"f (!shouldShow) {\n                currentTimeEl.style.display = \'none\';\n        " +
+"        return;\n            }\n\n            currentTimeEl.style.display = \'block\'" +
+";\n            var width = timeline.offsetWidth - 200;\n            var position =" +
+" isHourMode\n                ? (now.getMinutes() + (now.getSeconds() / 60)) / 60\n" +
+"                : (now.getHours() + (now.getMinutes() / 60)) / 24;\n            c" +
+"urrentTimeEl.style.left = (200 + (position * width)) + \'px\';\n        }\n\n        " +
+"function showTooltip(e) {\n            var el = e.target;\n            var execTim" +
+"e = new Date(el.getAttribute(\'data-time\'));\n            tooltip.innerHTML = \'<st" +
+"rong>\' + esc(el.getAttribute(\'data-job\')) + \'</strong><br>\' +\n                \'T" +
+"ime: \' + formatDateTime(execTime) + \'<br>\' +\n                \'Cron: \' + esc(el.g" +
+"etAttribute(\'data-cron\'));\n\n            var rect = el.getBoundingClientRect();\n " +
+"           tooltip.classList.add(\'visible\');\n            tooltip.style.left = (r" +
+"ect.left + rect.width / 2 - tooltip.offsetWidth / 2) + \'px\';\n            tooltip" +
+".style.top = (rect.top - tooltip.offsetHeight - 10) + \'px\';\n        }\n\n        f" +
+"unction hideTooltip() {\n            tooltip.classList.remove(\'visible\');\n       " +
+" }\n\n        function showLoading() {\n            hideStates();\n            conte" +
+"nt.style.display = \'none\';\n            loading.classList.add(\'visible\');\n       " +
+" }\n\n        function showError(msg) {\n            hideStates();\n            cont" +
+"ent.style.display = \'none\';\n            error.textContent = msg;\n            err" +
+"or.classList.add(\'visible\');\n        }\n\n        function hideStates() {\n        " +
+"    loading.classList.remove(\'visible\');\n            error.classList.remove(\'vis" +
+"ible\');\n            noJobs.classList.remove(\'visible\');\n        }\n\n        funct" +
+"ion esc(text) {\n            if (!text) return \'\';\n            var div = document" +
+".createElement(\'div\');\n            div.textContent = text;\n            return di" +
+"v.innerHTML;\n        }\n\n        function pad(n) {\n            return n < 10 ? \'0" +
+"\' + n : n;\n        }\n\n        function formatTime(d) {\n            return pad(d." +
+"getHours()) + \':\' + pad(d.getMinutes()) + \':\' + pad(d.getSeconds());\n        }\n\n" +
+"        function formatDateTime(d) {\n            return pad(d.getDate()) + \'/\' +" +
+" pad(d.getMonth() + 1) + \'/\' + d.getFullYear() + \' \' + formatTime(d);\n        }\n" +
+"\n        if (document.readyState === \'loading\') {\n            document.addEventL" +
+"istener(\'DOMContentLoaded\', init);\n        } else {\n            init();\n        " +
+"}\n    })();\n</script>\r\n");
 
 
         }
